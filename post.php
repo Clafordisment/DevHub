@@ -139,4 +139,4 @@ $currentUserId = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
 </div>
 <?php endif; ?>
 
-<script src="comments_ajax.js"></script>
+<script src="JS/comments_ajax.js"></script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Мар 18 2026 г., 11:53
+-- Время создания: Мар 24 2026 г., 20:41
 -- Версия сервера: 5.6.37
 -- Версия PHP: 5.5.38
 
@@ -36,6 +36,13 @@ CREATE TABLE `Comments` (
   `created_at` datetime NOT NULL,
   `issued_rate` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `Comments`
+--
+
+INSERT INTO `Comments` (`id_c`, `id_p`, `id_u`, `content`, `created_at`, `issued_rate`) VALUES
+(20, 6, 5, 'А я вочиноубароу', '2026-03-18 16:40:22', 0);
 
 -- --------------------------------------------------------
 
@@ -97,7 +104,7 @@ CREATE TABLE `tags_posts` (
 CREATE TABLE `Users` (
   `Id_U` int(11) NOT NULL,
   `username` varchar(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `login` varchar(20) NOT NULL,
   `password` varchar(30) NOT NULL,
   `create_at` timestamp NOT NULL,
@@ -109,7 +116,8 @@ CREATE TABLE `Users` (
 --
 
 INSERT INTO `Users` (`Id_U`, `username`, `email`, `login`, `password`, `create_at`, `avRate`) VALUES
-(2, 'Foogoolya', '', 'Foogle_1234', '1234', '0000-00-00 00:00:00', NULL);
+(2, 'Foogoolya', '', 'Foogle_1234', '1234', '0000-00-00 00:00:00', NULL),
+(5, NULL, NULL, 'Вочиноубароу', '1234', '0000-00-00 00:00:00', NULL);
 
 --
 -- Индексы сохранённых таблиц
@@ -161,7 +169,7 @@ ALTER TABLE `Users`
 -- AUTO_INCREMENT для таблицы `Comments`
 --
 ALTER TABLE `Comments`
-  MODIFY `id_c` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_c` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT для таблицы `Posts`
 --
@@ -181,7 +189,7 @@ ALTER TABLE `tags_posts`
 -- AUTO_INCREMENT для таблицы `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `Id_U` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id_U` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
@@ -190,8 +198,8 @@ ALTER TABLE `Users`
 -- Ограничения внешнего ключа таблицы `Comments`
 --
 ALTER TABLE `Comments`
-  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`id_u`) REFERENCES `Test_DB`.`Users` (`Id_U`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`id_p`) REFERENCES `Test_DB`.`Posts` (`id_p`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`id_u`) REFERENCES `Users` (`Id_U`) ON DELETE CASCADE,
+  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`id_p`) REFERENCES `Posts` (`id_p`) ON DELETE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `tags_posts`
