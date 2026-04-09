@@ -60,8 +60,8 @@ if (!$checkPostResult || $checkPostResult->num_rows == 0) {
     exit;
 }
 
-$insertSql = "INSERT INTO Comments (id_p, id_u, content, issued_rate, created_at) 
-              VALUES ($postId, $userId, '$escapedContent', 0, NOW())";
+$insertSql = "INSERT INTO Comments (id_p, id_u, content, created_at) 
+              VALUES ($postId, $userId, '$escapedContent', NOW())";
 
 if ($conn->query($insertSql)) {
     $commentId = $conn->insert_id;
@@ -83,7 +83,8 @@ if ($conn->query($insertSql)) {
             'content' => $content,
             'author' => $authorName,
             'author_id' => $userId,
-            'date' => date('d.m.Y H:i')
+            'date' => date('d.m.Y H:i'),
+            'likes_count' => 0
         ]
     ]);
 } else {

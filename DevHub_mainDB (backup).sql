@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:4306
--- Время создания: Апр 09 2026 г., 15:13
+-- Время создания: Апр 09 2026 г., 16:53
 -- Версия сервера: 5.6.37
 -- Версия PHP: 5.5.38
 
@@ -42,7 +42,8 @@ CREATE TABLE `Comments` (
 --
 
 INSERT INTO `Comments` (`id_c`, `id_p`, `id_u`, `content`, `created_at`, `likes_count`) VALUES
-(20, 6, 5, 'А я вочиноубароу', '2026-03-18 16:40:22', 0);
+(20, 6, 5, 'А я вочиноубароу', '2026-03-18 16:40:22', 0),
+(23, 8, 6, 'ewf', '2026-04-09 16:51:31', 0);
 
 -- --------------------------------------------------------
 
@@ -81,7 +82,7 @@ CREATE TABLE `Posts` (
 
 INSERT INTO `Posts` (`id_p`, `id_type`, `id_u`, `title`, `content`, `create_at`, `avRate`, `isNote`, `ownPrev`) VALUES
 (6, 1, 2, 'Какой-то опубликован', 'Сгенеренный текст из ворда (путём =rand()):\r\nВидео предоставляет прекрасную возможность подтвердить свою точку зрения. Чтобы вставить код внедрения для видео, которое вы хотите добавить, нажмите \"Видео в сети\".Вы также можете ввести ключевое слово, чтобы найти в Интернете видео, которое лучше всего подходит для вашего документа.\r\nЧтобы придать документу профессиональный вид, воспользуйтесь доступными в Word макетами верхних и нижних колонтитулов, титульной страницы и текстовых полей, которые дополняют друг друга. Например, вы можете добавить подходящую титульную страницу, верхний колонтитул и боковое примечание. Откройте вкладку \"Вставка\" и выберите нужные элементы из различных коллекций.\r\nТемы и стили также помогают придать документу единообразный вид. Если на вкладке \"Конструктор\" выбрать другую тему, то изображения, диаграммы и графические элементы SmartArt изменятся соответствующим образом.При применении стилей заголовки изменяются в соответствии с новой темой.\r\nНовые кнопки, которые видны, только если они действительно нужны, экономят время при работе в Word.Чтобы изменить расположение рисунка в документе, щелкните его, и рядом с ним появится кнопка для доступа к параметрам разметки. При работе с таблицей щелкните то место, куда нужно добавить строку или столбец, и щелкните знак \"плюс\".\r\nЧитать тоже стало проще благодаря новому режиму чтения. Можно свернуть части документа, чтобы сосредоточиться на нужном фрагменте текста. Если вы прервете чтение, не дойдя до конца документа, Word запомнит, в каком месте вы остановились (даже на другом устройстве).', '2026-03-09 19:24:40', 0, 0, ''),
-(8, 1, 2, 'УАщшцтацута', 'УАЦЩРШшртуацацдтлуцу', '2026-03-11 13:34:47', 0, 0, ''),
+(8, 1, 2, 'УАщшцтацута', 'УАЦЩРШшртуацацдтлуцу', '2026-03-11 13:34:47', 3, 0, ''),
 (9, 1, 2, 'Какой то черновик', 'И какой то текст черновика', '2026-03-12 18:07:40', 0, 1, ''),
 (10, 1, 2, 'Ещё черновичок', 'Бу', '2026-03-12 18:21:24', 0, 1, '');
 
@@ -103,6 +104,27 @@ CREATE TABLE `posts_catg` (
 INSERT INTO `posts_catg` (`id_PType`, `name`) VALUES
 (2, 'Промпты'),
 (1, 'Разработка');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `post_rates`
+--
+
+CREATE TABLE `post_rates` (
+  `id_r` int(11) NOT NULL,
+  `id_p` int(11) NOT NULL,
+  `id_u` int(11) NOT NULL,
+  `rate` float NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `post_rates`
+--
+
+INSERT INTO `post_rates` (`id_r`, `id_p`, `id_u`, `rate`, `created_at`) VALUES
+(1, 8, 6, 3, '2026-04-09 13:43:52');
 
 -- --------------------------------------------------------
 
@@ -233,7 +255,8 @@ CREATE TABLE `Users` (
 
 INSERT INTO `Users` (`Id_U`, `username`, `email`, `login`, `password`, `create_at`, `avRate`) VALUES
 (2, 'Foogoolya', '', 'Foogle_1234', '1234', '0000-00-00 00:00:00', NULL),
-(5, NULL, NULL, 'Вочиноубароу', '1234', '0000-00-00 00:00:00', NULL);
+(5, NULL, NULL, 'Вочиноубароу', '1234', '0000-00-00 00:00:00', NULL),
+(6, NULL, NULL, 'ВОЧИНОБАРОУ', 'ладно2007', '0000-00-00 00:00:00', NULL);
 
 --
 -- Индексы сохранённых таблиц
@@ -270,6 +293,13 @@ ALTER TABLE `Posts`
 ALTER TABLE `posts_catg`
   ADD PRIMARY KEY (`id_PType`),
   ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Индексы таблицы `post_rates`
+--
+ALTER TABLE `post_rates`
+  ADD PRIMARY KEY (`id_r`),
+  ADD UNIQUE KEY `unique_rate` (`id_p`,`id_u`);
 
 --
 -- Индексы таблицы `Tags`
@@ -309,12 +339,12 @@ ALTER TABLE `Users`
 -- AUTO_INCREMENT для таблицы `Comments`
 --
 ALTER TABLE `Comments`
-  MODIFY `id_c` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_c` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT для таблицы `comments_likes`
 --
 ALTER TABLE `comments_likes`
-  MODIFY `id_l` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_l` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `Posts`
 --
@@ -325,6 +355,11 @@ ALTER TABLE `Posts`
 --
 ALTER TABLE `posts_catg`
   MODIFY `id_PType` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `post_rates`
+--
+ALTER TABLE `post_rates`
+  MODIFY `id_r` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT для таблицы `Tags`
 --
@@ -344,7 +379,7 @@ ALTER TABLE `tags_posts`
 -- AUTO_INCREMENT для таблицы `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `Id_U` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `Id_U` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
