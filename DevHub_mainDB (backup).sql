@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:4306
--- Время создания: Мар 26 2026 г., 17:15
+-- Время создания: Апр 09 2026 г., 15:13
 -- Версия сервера: 5.6.37
 -- Версия PHP: 5.5.38
 
@@ -34,15 +34,28 @@ CREATE TABLE `Comments` (
   `id_u` int(11) NOT NULL,
   `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
-  `issued_rate` tinyint(4) NOT NULL
+  `likes_count` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `Comments`
 --
 
-INSERT INTO `Comments` (`id_c`, `id_p`, `id_u`, `content`, `created_at`, `issued_rate`) VALUES
+INSERT INTO `Comments` (`id_c`, `id_p`, `id_u`, `content`, `created_at`, `likes_count`) VALUES
 (20, 6, 5, 'А я вочиноубароу', '2026-03-18 16:40:22', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `comments_likes`
+--
+
+CREATE TABLE `comments_likes` (
+  `id_l` int(11) NOT NULL,
+  `id_c` int(11) NOT NULL,
+  `id_u` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -235,6 +248,15 @@ ALTER TABLE `Comments`
   ADD KEY `id_p` (`id_p`);
 
 --
+-- Индексы таблицы `comments_likes`
+--
+ALTER TABLE `comments_likes`
+  ADD PRIMARY KEY (`id_l`),
+  ADD UNIQUE KEY `unique_like` (`id_c`,`id_u`),
+  ADD KEY `id_c` (`id_c`),
+  ADD KEY `id_u` (`id_u`);
+
+--
 -- Индексы таблицы `Posts`
 --
 ALTER TABLE `Posts`
@@ -289,6 +311,11 @@ ALTER TABLE `Users`
 ALTER TABLE `Comments`
   MODIFY `id_c` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
+-- AUTO_INCREMENT для таблицы `comments_likes`
+--
+ALTER TABLE `comments_likes`
+  MODIFY `id_l` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT для таблицы `Posts`
 --
 ALTER TABLE `Posts`
@@ -328,6 +355,13 @@ ALTER TABLE `Users`
 ALTER TABLE `Comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`id_u`) REFERENCES `Users` (`Id_U`) ON DELETE CASCADE,
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`id_p`) REFERENCES `Posts` (`id_p`) ON DELETE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `comments_likes`
+--
+ALTER TABLE `comments_likes`
+  ADD CONSTRAINT `comments_likes_ibfk_1` FOREIGN KEY (`id_c`) REFERENCES `Comments` (`id_c`) ON DELETE CASCADE,
+  ADD CONSTRAINT `comments_likes_ibfk_2` FOREIGN KEY (`id_u`) REFERENCES `Users` (`Id_U`) ON DELETE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `Posts`
