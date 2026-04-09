@@ -78,10 +78,8 @@ class CommentSystem {
                 if (countSpan) countSpan.textContent = data.likes_count;
                 if (data.action === 'liked') {
                     buttonElement.classList.add('liked');
-                    this.showMessage('Лайк поставлен', 'ok');
                 } else {
                     buttonElement.classList.remove('liked');
-                    this.showMessage('Лайк убран', 'ok');
                 }
             } else {
                 this.showMessage(data.error || 'Ошибка', 'err');
@@ -94,7 +92,6 @@ class CommentSystem {
     async submitComment() {
         const content = this.commentInput.value.trim();
         if (!content) {
-            this.showMessage('Введите комментарий', 'err');
             return;
         }
         this.setLoadingState(true);
@@ -108,7 +105,6 @@ class CommentSystem {
             if (data.success) {
                 this.addCommentToDOM(data.comment);
                 this.commentInput.value = '';
-                this.showMessage('Комментарий добавлен', 'ok');
             } else {
                 this.showMessage(data.error || 'Ошибка', 'err');
             }
@@ -134,7 +130,6 @@ class CommentSystem {
                 commentCard.style.opacity = '0';
                 setTimeout(() => {
                     commentCard.remove();
-                    this.showMessage('Комментарий удален', 'ok');
                     if (this.commentsWrapper.children.length === 0) {
                         this.commentsWrapper.innerHTML = '<p class="no-comments">Пока нет комментариев. Будьте первым!</p>';
                     }
