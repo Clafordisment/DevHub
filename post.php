@@ -23,7 +23,8 @@ if ($postId > 0) {
             p.title,
             p.content,
             COALESCE(NULLIF(u.username, ''), u.login) AS author_name,
-            p.create_at
+            p.create_at,
+            p.avRate
         FROM Posts p
         JOIN Users u ON p.id_u = u.Id_U
         WHERE p.id_p = {$postId} AND p.isNote = 0
@@ -70,6 +71,19 @@ if ($postId > 0) {
         $votesCount = (int)$votesData['count'];
     }
 }
+
+$userRating = 0;
+if ($postId > 0 && isset($_SESSION['user_id'])) {
+    $userId = (int)$_SESSION['user_id'];
+    $userRateSql = "SELECT rate FROM post_rates WHERE id_p = $postId AND id_u = $userId LIMIT 1";
+    $userRateResult = $conn->query($userRateSql);
+    if ($userRateResult && $userRateResult->num_rows > 0) {
+        $userRateData = $userRateResult->fetch_assoc();
+        $userRating = (float)$userRateData['rate'];
+    }
+}
+
+
 ?>
 
 
@@ -106,13 +120,13 @@ if ($postId > 0) {
 </div>
 
 <?php if ($post): ?>
-<div class="rating-container" data-post-id="<?php echo $postId; ?>">
+<div class="rating-container" data-post-id="<?php echo $postId; ?> "data-user-rating="<?php echo $userRating; ?>">
     <div class="rating-title">Оцените публикацию</div>
     <div class="stars" id="star-rating">
         <span class="star" data-value="1">☆</span>
         <span class="star" data-value="2">☆</span>
         <span class="star" data-value="3">☆</span>
-        <span class="star" data-value="4">☆</span>
+        <span class="star" data-value="4">☆</span> 
         <span class="star" data-value="5">☆</span>
     </div>
     <div class="rating-value">
@@ -127,8 +141,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const ratingContainer = document.querySelector('.rating-container');
     const ratingCurrent = document.querySelector('.rating-current');
     const ratingVotes = document.querySelector('.rating-votes');
-    let currentRating = 0;
-    
+    let currentRating = parseFloat(ratingContainer.dataset.userRating) || 0;
+
+    if(currentRating > 0) {
+        highlightStars(currentRating);
+    }    
+
     stars.forEach(star => {
         star.addEventListener('mouseenter', function() {
             const value = parseInt(this.dataset.value);

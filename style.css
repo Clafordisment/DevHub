@@ -620,3 +620,81 @@ hr {
     opacity: 1;
     visibility: visible;
 }
+
+.rating-container {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #2a2a2a;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.rating-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #b0b0b0;
+}
+
+.stars {
+    display: inline-flex;
+    gap: 8px;
+    direction: ltr;
+}
+
+.star {
+    cursor: pointer;
+    font-size: 32px;
+    color: #444444;
+    transition: color 0.1s ease;
+    user-select: none;
+}
+
+.star.active {
+    color: #ffc107;
+}
+
+.rating-value {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #888888;
+}
+
+.rating-current {
+    font-weight: bold;
+    color: #ffc107;
+}
+
+
+.comment-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.like-comment-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #888888;
+    font-size: 14px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.like-comment-btn:hover {
+    color: #ff6b6b;
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+.like-comment-btn.liked {
+    color: #ff6b6b;
+}
+
+.like-count {
+    font-size: 12px;
+}
