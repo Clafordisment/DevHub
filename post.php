@@ -93,7 +93,7 @@ if ($postId > 0 && isset($_SESSION['user_id'])) {
      data-current-user-id="<?php echo $currentUserId; ?>"
      style="display: none;"></div>
 
-<div class="box" style="width: 1200px;">
+<div class="box">
     <?php if ($post): ?>
         <div class="post-full-header">
             <a href="index.php" class="back-button">
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<div class="box" style="width: 1200px; margin-top: 0; border-radius: 12px;">
+<div class="box" style="margin-top: 0; border-radius: 12px;">
     <h2 style="text-align: left; margin-bottom: 25px;">Комментарии</h2>
     
     <?php if (isset($_SESSION['user_id'])): ?>

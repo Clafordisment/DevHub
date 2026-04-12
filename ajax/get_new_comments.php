@@ -50,10 +50,10 @@ if ($result)
                     'author_id' => (int)$row['author_id'],
                     'likes_count' => (int)$row['likes_count'],
                     'date' => date('d.m.Y H:i', strtotime($row['created_at']))
-                ]
+                ];
             }
     }
 
-    echo json_encode(['comments'] => []);
+    echo json_encode(['comments' => $comments]);
     $conn->close();
 ?>
