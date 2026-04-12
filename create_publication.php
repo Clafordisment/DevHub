@@ -24,6 +24,7 @@ $draftIdFromGet = isset($_GET['draft_id']) ? (int)$_GET['draft_id'] : 0;
 $editingDraft = false;
 $draftTitle = '';
 $draftContent = '';
+$existingTags = [];
 
 $postCatgSql = "SELECT id_PType, name FROM posts_catg ORDER BY id_PType";
 $postCatgResult = $conn->query($postCatgSql);
@@ -61,6 +62,19 @@ if ($draftIdFromGet > 0) {
         $editingDraft = true;
         $draftTitle = $rowDraft['title'];
         $draftContent = $rowDraft['content'];
+        
+        $tagsSqlExisting = "
+            SELECT t.id_t 
+            FROM tags_posts tp
+            JOIN Tags t ON tp.id_t = t.id_t
+            WHERE tp.id_p = {$draftIdFromGet}
+        ";
+        $tagsExistingResult = $conn->query($tagsSqlExisting);
+        if ($tagsExistingResult) {
+            while ($row = $tagsExistingResult->fetch_assoc()) {
+                $existingTags[] = $row['id_t'];
+            }
+        }
     }
 }
 
@@ -79,6 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $isNote = 1; 
         }
 
+        $postId = 0;
+
         if ($draftId > 0) {
             $stmt = $conn->prepare("
                 UPDATE Posts 
@@ -88,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("ssiiii", $title, $content, $isNote, $postCategory, $draftId, $userId);
             $stmt->execute();
             $stmt->close();
+            $postId = $draftId;
         } else {
             $stmt = $conn->prepare("
                 INSERT INTO Posts (id_type, id_u, title, content, create_at, avRate, isNote, ownPrev)
@@ -96,12 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("iissi", $postCategory, $userId, $title, $content, $isNote);
             $stmt->execute();
             $stmt->close();
-        }
-
-        if (isset($conn->insert_id)) {
             $postId = $conn->insert_id;
-        } else {
-            $postId = $draftId;
         }
         
         if ($postId > 0) {
@@ -126,6 +138,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 require_once 'header.php';
 ?>
+
+<div id="post-data" 
+     data-existing-tags='<?php echo json_encode($existingTags); ?>'
+     style="display: none;"></div>
 
 <div class="box">
     <h2>Создать новую публикацию</h2>
@@ -154,7 +170,7 @@ require_once 'header.php';
         ?></textarea>
         
         <div class="selection-buttons">
-            <button type="button" class="selection-btn" id="select-tags-btn">📎 Выбрать теги</button>
+            <button type="button" class="selection-btn" id="select-tags-btn">♯ Выбрать теги</button>
             <button type="button" class="selection-btn" id="select-category-btn" style="display: none;">Выбрать раздел</button>
         </div>
     
@@ -179,24 +195,24 @@ require_once 'header.php';
         <div class="selected-tags-area" id="modal-selected-tags">
             <span style="color: #888888; font-size: 12px;">Выбранные теги:</span>
         </div>
-<div class="modal-body" id="modal-tags-list">
-    <?php
-    $currentCategory = null;
-    foreach ($allTags as $tag):
-        if ($currentCategory !== $tag['category_name']):
-            if ($currentCategory !== null): ?>
-                        </div>   
-                    </div>   
-            <?php endif; ?>
+        <div class="modal-body" id="modal-tags-list">
+            <?php
+            $currentCategory = null;
+            foreach ($allTags as $tag):
+                if ($currentCategory !== $tag['category_name']):
+                    if ($currentCategory !== null): ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
                     <div class="tag-category" data-category-id="<?php echo $tag['id_catg']; ?>">
                         <div class="tag-category-header">
                             <h4 style="color: <?php echo $tag['color_code']; ?>;"><?php echo htmlspecialchars($tag['category_name']); ?></h4>
                             <span class="collapse-icon">▼</span>
                         </div>
                         <div class="tag-list">
-            <?php 
-            $currentCategory = $tag['category_name'];
-        endif; ?>
+                    <?php 
+                    $currentCategory = $tag['category_name'];
+                endif; ?>
                     <span class="tag-item" 
                         data-tag-id="<?php echo $tag['id_t']; ?>" 
                         data-tag-name="<?php echo htmlspecialchars($tag['name']); ?>" 
@@ -204,10 +220,10 @@ require_once 'header.php';
                         style="border-color: <?php echo $tag['color_code']; ?>;">
                         <?php echo htmlspecialchars($tag['name']); ?>
                     </span>
-    <?php endforeach; ?>
-                    </div>   
-                </div>       
-            </div>         
+            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
         <div class="modal-footer">
             <button id="apply-tags-btn">Применить</button>
         </div>

@@ -25,7 +25,7 @@ if ($postId <= 0 || $rating < 0 || $rating > 5) {
     exit;
 }
 
-require_once 'config.php';
+require_once '../config.php';
 
 $conn = new mysqli(
     $config['db_host'],
@@ -33,8 +33,6 @@ $conn = new mysqli(
     $config['db_pass'],
     $config['db_name']
 );
-$conn->set_charset("utf8");
-
 $conn->set_charset("utf8");
 
 $userId = (int)$_SESSION['user_id'];

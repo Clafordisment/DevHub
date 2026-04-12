@@ -33,7 +33,7 @@ if (empty($content)) {
     exit;
 }
 
-require_once 'config.php';
+require_once '../config.php';
 
 $conn = new mysqli(
     $config['db_host'],
@@ -41,8 +41,6 @@ $conn = new mysqli(
     $config['db_pass'],
     $config['db_name']
 );
-$conn->set_charset("utf8");
-
 $conn->set_charset("utf8");
 
 if ($conn->connect_error) {

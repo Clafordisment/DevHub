@@ -77,7 +77,8 @@ if ($postId > 0) {
             c.created_at,
             c.likes_count,
             COALESCE(NULLIF(u.username, ''), u.login) AS comment_author,
-            u.Id_U as author_id
+            u.Id_U as author_id,
+            (SELECT COUNT(*) FROM comments_likes WHERE id_c = c.id_c AND id_u = {$currentUserId}) > 0 as is_liked
         FROM Comments c
         JOIN Users u ON c.id_u = u.Id_U
         WHERE c.id_p = {$postId}

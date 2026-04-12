@@ -8,7 +8,7 @@ class CommentSystem {
         this.submitButton = document.querySelector('.comment-submit');
         this.init();
     }
-    
+
     init() {
         if (this.commentForm) {
             this.commentForm.addEventListener('submit', (e) => {
@@ -16,37 +16,63 @@ class CommentSystem {
                 this.submitComment();
             });
         }
+
+        this.initExistingComments();
+
         this.attachDeleteHandlers();
         this.attachLikeHandlers();
         this.startPolling();
     }
-    
+
+    initExistingComments() {
+        const comments = document.querySelectorAll('.comment-card');
+        if (comments.length > 0) {
+            const lastComment = comments[comments.length - 1];
+            this.lastCommentId = parseInt(lastComment.dataset.commentId) || 0;
+        } else {
+            this.lastCommentId = 0;
+        }
+
+        document.querySelectorAll('.like-comment-btn').forEach(btn => {
+            if (btn.dataset.isLiked === '1') {
+                btn.classList.add('liked');
+            }
+        });
+    }
+
     startPolling() {
-        this.lastCommentId = this.getLastCommentId();
         this.pollingInterval = setInterval(() => this.checkNewComments(), 5000);
     }
-    
+
     getLastCommentId() {
         const comments = document.querySelectorAll('.comment-card');
         if (comments.length > 0) {
             return parseInt(comments[0].dataset.commentId) || 0;
         }
-        return 0;
+        return this.lastCommentId || 0;
     }
-    
+
     async checkNewComments() {
         try {
             const response = await fetch(`ajax/get_new_comments.php?post_id=${this.postId}&last_id=${this.lastCommentId}`);
             const data = await response.json();
             if (data.comments && data.comments.length > 0) {
-                data.comments.reverse().forEach(comment => this.addCommentToDOM(comment));
-                this.lastCommentId = data.comments[data.comments.length - 1].id;
+                data.comments.reverse().forEach(comment => {
+                    if (!document.querySelector(`.comment-card[data-comment-id="${comment.id}"]`)) {
+                        this.addCommentToDOM(comment);
+                    }
+                });
+                const newLastId = data.comments[data.comments.length - 1].id;
+                if (newLastId > this.lastCommentId) {
+                    this.lastCommentId = newLastId;
+                }
             }
         } catch (error) {
             console.error('Polling error:', error);
         }
     }
-    
+
+
     attachDeleteHandlers() {
         document.querySelectorAll('.delete-comment-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -55,7 +81,7 @@ class CommentSystem {
             });
         });
     }
-    
+
     attachLikeHandlers() {
         document.querySelectorAll('.like-comment-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -64,7 +90,7 @@ class CommentSystem {
             });
         });
     }
-    
+
     async likeComment(commentId, buttonElement) {
         try {
             const response = await fetch('ajax/like_comment.php', {
@@ -88,7 +114,7 @@ class CommentSystem {
             this.showMessage('Ошибка соединения', 'err');
         }
     }
-    
+
     async submitComment() {
         const content = this.commentInput.value.trim();
         if (!content) {
@@ -103,8 +129,10 @@ class CommentSystem {
             });
             const data = await response.json();
             if (data.success) {
+                data.comment.is_from_current_user = true;
                 this.addCommentToDOM(data.comment);
                 this.commentInput.value = '';
+                this.lastCommentId = Math.max(this.lastCommentId, data.comment.id);
             } else {
                 this.showMessage(data.error || 'Ошибка', 'err');
             }
@@ -114,7 +142,7 @@ class CommentSystem {
             this.setLoadingState(false);
         }
     }
-    
+
     async deleteComment(commentId, buttonElement) {
         if (!confirm('Вы точно хотите удалить этот комментарий?')) return;
         const commentCard = buttonElement.closest('.comment-card');
@@ -141,12 +169,18 @@ class CommentSystem {
             this.showMessage('Ошибка соединения', 'err');
         }
     }
-    
+
     addCommentToDOM(comment) {
+        if (document.querySelector(`.comment-card[data-comment-id="${comment.id}"]`)) {
+            return;
+        }
+
         const noComments = this.commentsWrapper.querySelector('.no-comments');
         if (noComments) noComments.remove();
+
         const commentHTML = this.createCommentHTML(comment);
         this.commentsWrapper.insertAdjacentHTML('afterbegin', commentHTML);
+
         const newComment = this.commentsWrapper.firstElementChild;
         const deleteBtn = newComment.querySelector('.delete-comment-btn');
         if (deleteBtn) {
@@ -170,13 +204,16 @@ class CommentSystem {
             newComment.style.transform = 'translateY(0)';
         }, 10);
     }
-    
+
     createCommentHTML(comment) {
         const isAuthor = this.currentUserId == comment.author_id;
         const date = comment.date || new Date().toLocaleString('ru-RU', {
             day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
         });
         const likesCount = comment.likes_count || 0;
+        const isLiked = comment.is_liked === '1' || comment.is_liked === 1 || comment.is_liked === true;
+        const likedClass = isLiked ? 'liked' : '';
+
         return `
             <div class="comment-card" data-comment-id="${comment.id}">
                 <div class="comment-header">
@@ -185,7 +222,7 @@ class CommentSystem {
                 </div>
                 <p class="comment-content">${this.escapeHtml(comment.content).replace(/\n/g, '<br>')}</p>
                 <div class="comment-footer">
-                    <button class="like-comment-btn" data-comment-id="${comment.id}">
+                    <button class="like-comment-btn ${likedClass}" data-comment-id="${comment.id}" data-is-liked="${isLiked ? '1' : '0'}">
                         ❤️ <span class="like-count">${likesCount}</span>
                     </button>
                     ${isAuthor ? `
@@ -197,20 +234,20 @@ class CommentSystem {
             </div>
         `;
     }
-    
+
     escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
-    
+
     setLoadingState(isLoading) {
         if (!this.submitButton) return;
         this.submitButton.disabled = isLoading;
         this.submitButton.textContent = isLoading ? 'Отправка...' : 'Отправить';
         this.commentInput.disabled = isLoading;
     }
-    
+
     showMessage(text, type) {
         const oldMsg = document.querySelector('.ajax-message');
         if (oldMsg) oldMsg.remove();
