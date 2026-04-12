@@ -80,7 +80,8 @@ if ($result && $result->num_rows > 0) {
     }
 }
 ?>
-
+<div class="container">
+<div class="box">
 <h2>Мои черновики</h2>
 
 <div class="posts-wrapper">
@@ -123,4 +124,6 @@ if ($result && $result->num_rows > 0) {
     <div style="display: flex; justify-content: center;">
         <a href="create_publication.php" class="new-publication-btn">Создать новую публикацию</a>
     </div>
+</div>
+</div>
 </div>
