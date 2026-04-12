@@ -24,6 +24,7 @@ $draftIdFromGet = isset($_GET['draft_id']) ? (int)$_GET['draft_id'] : 0;
 $editingDraft = false;
 $draftTitle = '';
 $draftContent = '';
+$draftImage = '';
 $existingTags = [];
 
 $postCatgSql = "SELECT id_PType, name FROM posts_catg ORDER BY id_PType";
@@ -51,7 +52,7 @@ if ($tagsResult) {
 
 if ($draftIdFromGet > 0) {
     $sqlDraft = "
-        SELECT title, content 
+        SELECT title, content, ownPrev
         FROM Posts 
         WHERE id_p = {$draftIdFromGet} AND id_u = {$userId} AND isNote = 1
         LIMIT 1
@@ -62,6 +63,7 @@ if ($draftIdFromGet > 0) {
         $editingDraft = true;
         $draftTitle = $rowDraft['title'];
         $draftContent = $rowDraft['content'];
+        $draftImage = $rowDraft['ownPrev'];
         
         $tagsSqlExisting = "
             SELECT t.id_t 
@@ -85,6 +87,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $draftId = isset($_POST['draft_id']) ? (int)$_POST['draft_id'] : 0;
     $postCategory = isset($_POST['post_category']) ? (int)$_POST['post_category'] : 1;
     $selectedTags = isset($_POST['selected_tags']) ? explode(',', $_POST['selected_tags']) : [];
+    
+    // Обработка загрузки изображения
+    $imagePath = '';
+    if (isset($_FILES['post_image']) && $_FILES['post_image']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = 'uploads/';
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        
+        $fileExt = pathinfo($_FILES['post_image']['name'], PATHINFO_EXTENSION);
+        $fileName = uniqid() . '.' . $fileExt;
+        $targetPath = $uploadDir . $fileName;
+        
+        if (move_uploaded_file($_FILES['post_image']['tmp_name'], $targetPath)) {
+            $imagePath = $targetPath;
+        }
+    } elseif (isset($_POST['existing_image'])) {
+        $imagePath = $_POST['existing_image'];
+    }
 
     if ($title !== '' && $content !== '') {
         if (isset($_POST['publish'])) {
@@ -98,19 +119,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($draftId > 0) {
             $stmt = $conn->prepare("
                 UPDATE Posts 
-                SET title = ?, content = ?, isNote = ?, id_type = ?, create_at = NOW()
+                SET title = ?, content = ?, isNote = ?, id_type = ?, ownPrev = ?, create_at = NOW()
                 WHERE id_p = ? AND id_u = ?
             ");
-            $stmt->bind_param("ssiiii", $title, $content, $isNote, $postCategory, $draftId, $userId);
+            $stmt->bind_param("ssiissi", $title, $content, $isNote, $postCategory, $imagePath, $draftId, $userId);
             $stmt->execute();
             $stmt->close();
             $postId = $draftId;
         } else {
             $stmt = $conn->prepare("
                 INSERT INTO Posts (id_type, id_u, title, content, create_at, avRate, isNote, ownPrev)
-                VALUES (?, ?, ?, ?, NOW(), 0, ?, '')
+                VALUES (?, ?, ?, ?, NOW(), 0, ?, ?)
             ");
-            $stmt->bind_param("iissi", $postCategory, $userId, $title, $content, $isNote);
+            $stmt->bind_param("iissis", $postCategory, $userId, $title, $content, $isNote, $imagePath);
             $stmt->execute();
             $stmt->close();
             $postId = $conn->insert_id;
@@ -145,9 +166,10 @@ require_once 'header.php';
 
 <div class="box">
     <h2>Создать новую публикацию</h2>
-    <form method="POST" id="publication-form">
+    <form method="POST" id="publication-form" enctype="multipart/form-data">
         <input type="hidden" name="draft_id" value="<?php echo $editingDraft ? (int)$draftIdFromGet : 0; ?>">
         <input type="hidden" name="selected_tags" id="selected-tags-input" value="">
+        <input type="hidden" name="existing_image" id="existing-image" value="<?php echo htmlspecialchars($draftImage); ?>">
         
         <label>Заголовок</label>
         <input type="text" name="title" class="input-zone" placeholder="Введите заголовок" required
@@ -164,6 +186,18 @@ require_once 'header.php';
             </select>
         </div>
         
+        <div class="image-upload-area">
+            <label>Изображение для карточки</label>
+            <input type="file" name="post_image" id="post_image" accept="image/jpeg,image/png,image/gif,image/webp">
+            <div id="image-preview-container" style="display: <?php echo !empty($draftImage) ? 'block' : 'none'; ?>;">
+                <div class="image-preview">
+                    <img id="image-preview" src="<?php echo htmlspecialchars($draftImage); ?>" alt="Предпросмотр">
+                </div>
+                <button type="button" class="remove-image-btn" id="remove-image-btn">Удалить изображение</button>
+            </div>
+            <small style="color: #888888; display: block; margin-top: 8px;">Рекомендуемый размер: 400x300px. Поддерживаются JPG, PNG, GIF, WEBP.</small>
+        </div>
+        
         <label>Содержание</label>
         <textarea name="content" class="input-zone" placeholder="Введите текст публикации..." rows="10" required><?php 
             echo htmlspecialchars($editingDraft ? $draftContent : ''); 
@@ -171,7 +205,6 @@ require_once 'header.php';
         
         <div class="selection-buttons">
             <button type="button" class="selection-btn" id="select-tags-btn">♯ Выбрать теги</button>
-            <button type="button" class="selection-btn" id="select-category-btn" style="display: none;">Выбрать раздел</button>
         </div>
     
         <div id="post-tags-container" class="post-tags" style="display: none;">
@@ -231,3 +264,35 @@ require_once 'header.php';
 </div>
 
 <script src="JS/tag_selector.js"></script>
+<script>
+// Предпросмотр изображения
+const imageInput = document.getElementById('post_image');
+const previewContainer = document.getElementById('image-preview-container');
+const previewImg = document.getElementById('image-preview');
+const removeBtn = document.getElementById('remove-image-btn');
+const existingImageInput = document.getElementById('existing-image');
+
+if (imageInput) {
+    imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                previewImg.src = event.target.result;
+                previewContainer.style.display = 'block';
+                existingImageInput.value = '';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+if (removeBtn) {
+    removeBtn.addEventListener('click', function() {
+        previewImg.src = '';
+        previewContainer.style.display = 'none';
+        imageInput.value = '';
+        existingImageInput.value = '';
+    });
+}
+</script>

@@ -121,116 +121,117 @@ if ($postId > 0 && isset($_SESSION['user_id'])) {
      data-current-user-id="<?php echo $currentUserId; ?>"
      style="display: none;"></div>
 
-<div class="box">
-    <?php if ($post): ?>
-        <div class="post-full-header">
-            <a href="index.php" class="back-button">
-                &#8592; Назад
-            </a>
-            <h1 class="post-full-title">
-                <?php echo htmlspecialchars($post['title']); ?>
-            </h1>
-        </div>
-        
-        <div class="post-full-author">
-            Автор: <?php echo htmlspecialchars($post['author_name']); ?>
-        </div>
-        
-        <!-- Блок с категорией и тегами -->
-        <div class="post-meta">
-            <?php if (!empty($categoryName)): ?>
-            <div class="post-category">
-                <span class="post-meta-label">Категория:</span>
-                <span class="post-meta-value"><?php echo htmlspecialchars($categoryName); ?></span>
-            </div>
-            <?php endif; ?>
-            
-            <?php if (!empty($postTags)): ?>
-            <div class="post-tags">
-                <span class="post-meta-label">Теги:</span>
-                <div class="post-tags-list">
-                    <?php foreach ($postTags as $tag): ?>
-                        <span class="post-tag-item" style="border-color: <?php echo $tag['color_code']; ?>; background-color: <?php echo $tag['color_code']; ?>20;">
-                            <?php echo htmlspecialchars($tag['name']); ?>
-                        </span>
-                    <?php endforeach; ?>
+     <div class="container">
+        <div class="box">
+            <?php if ($post): ?>
+                <div class="post-full-header">
+                    <a href="index.php" class="back-button">
+                        &#8592; Назад
+                    </a>
+                    <h1 class="post-full-title">
+                        <?php echo htmlspecialchars($post['title']); ?>
+                    </h1>
                 </div>
-            </div>
-            <?php endif; ?>
-        </div>
-        
-        <div class="post-full-content">
-            <?php echo nl2br(htmlspecialchars($post['content'])); ?>
-        </div>
-    <?php else: ?>
-        <div class="msg err">
-            Публикация не найдена.
-        </div>
-        <div style="margin-top: 20px; text-align: center;">
-            <a href="index.php" class="back-link">&#8592; Вернуться на главную</a>
-        </div>
-    <?php endif; ?>
-</div>
-
-<?php if ($post): ?>
-<div class="rating-container" data-post-id="<?php echo $postId; ?>" data-user-rating="<?php echo $userRating; ?>">
-    <div class="rating-title">Оцените публикацию</div>
-    <div class="stars" id="star-rating">
-        <span class="star" data-value="1">☆</span>
-        <span class="star" data-value="2">☆</span>
-        <span class="star" data-value="3">☆</span>
-        <span class="star" data-value="4">☆</span> 
-        <span class="star" data-value="5">☆</span>
-    </div>
-    <div class="rating-value">
-        Средняя оценка: <span class="rating-current"><?php echo isset($post['avRate']) ? $post['avRate'] : '0'; ?></span> / 5
-        <span class="rating-votes">(<?php echo $votesCount; ?> голосов)</span>
-    </div>
-</div>
-
-<div class="box" style="margin-top: 0; border-radius: 12px;">
-    <h2 style="text-align: left; margin-bottom: 25px;">Комментарии</h2>
-    
-    <?php if (isset($_SESSION['user_id'])): ?>
-        <form class="comment-form" id="comment-form">
-            <label>Оставить комментарий</label>
-            <textarea name="comment_content" class="comment-input" placeholder="Введите ваш комментарий..." required></textarea>
-            <button type="submit" name="add_comment" class="comment-submit">Отправить</button>
-        </form>
-        <hr>
-    <?php else: ?>        
-        <div class="login-to-comment">
-            <a href="login.php" style="color: #b0b0b0;">Войдите</a>, чтобы оставить комментарий
-        </div>
-    <?php endif; ?>
-    
-    <div class="comments-wrapper">
-        <?php if (count($comments) > 0): ?>
-            <?php foreach ($comments as $comment): ?>
-                <div class="comment-card" data-comment-id="<?php echo $comment['id_c']; ?>">
-                    <div class="comment-header">
-                        <span class="comment-author"><?php echo htmlspecialchars($comment['comment_author']); ?></span>
-                        <span class="comment-date">
-                            <?php echo isset($comment['created_at']) ? date('d.m.Y H:i', strtotime($comment['created_at'])) : 'только что'; ?>
-                        </span>
+                
+                <div class="post-full-author">
+                    Автор: <?php echo htmlspecialchars($post['author_name']); ?>
+                </div>
+                
+                <div class="post-meta">
+                    <?php if (!empty($categoryName)): ?>
+                    <div class="post-category">
+                        <span class="post-meta-label">Категория:</span>
+                        <span class="post-meta-value"><?php echo htmlspecialchars($categoryName); ?></span>
                     </div>
-                    <p class="comment-content">
-                        <?php echo nl2br(htmlspecialchars($comment['content'])); ?>
-                    </p>
-                    <?php if ($currentUserId == $comment['author_id']): ?>
-                        <div class="comment-actions">
-                            <button class="comment-delete-btn delete-comment-btn" data-comment-id="<?php echo $comment['id_c']; ?>">
-                                Удалить
-                            </button>
+                    <?php endif; ?>
+                    
+                    <?php if (!empty($postTags)): ?>
+                    <div class="post-tags">
+                        <span class="post-meta-label">Теги:</span>
+                        <div class="post-tags-list">
+                            <?php foreach ($postTags as $tag): ?>
+                                <span class="post-tag-item" style="border-color: <?php echo $tag['color_code']; ?>; background-color: <?php echo $tag['color_code']; ?>20;">
+                                    <?php echo htmlspecialchars($tag['name']); ?>
+                                </span>
+                            <?php endforeach; ?>
                         </div>
+                    </div>
                     <?php endif; ?>
                 </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p class="no-comments">Пока нет комментариев. Будьте первым!</p>
-        <?php endif; ?>
-    </div>
-</div>
+                
+                <div class="post-full-content">
+                    <?php echo nl2br(htmlspecialchars($post['content'])); ?>
+                </div>
+            <?php else: ?>
+                <div class="msg err">
+                    Публикация не найдена.
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <a href="index.php" class="back-link">&#8592; Вернуться на главную</a>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <?php if ($post): ?>
+        <div class="rating-container" data-post-id="<?php echo $postId; ?>" data-user-rating="<?php echo $userRating; ?>">
+            <div class="rating-title">Оцените публикацию</div>
+            <div class="stars" id="star-rating">
+                <span class="star" data-value="1">☆</span>
+                <span class="star" data-value="2">☆</span>
+                <span class="star" data-value="3">☆</span>
+                <span class="star" data-value="4">☆</span> 
+                <span class="star" data-value="5">☆</span>
+            </div>
+            <div class="rating-value">
+                Средняя оценка: <span class="rating-current"><?php echo isset($post['avRate']) ? $post['avRate'] : '0'; ?></span> / 5
+                <span class="rating-votes">(<?php echo $votesCount; ?> голосов)</span>
+            </div>
+        </div>
+
+        <div class="box" style="margin-top: 0; border-radius: 12px;">
+            <h2 style="text-align: left; margin-bottom: 25px;">Комментарии</h2>
+            
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <form class="comment-form" id="comment-form">
+                    <label>Оставить комментарий</label>
+                    <textarea name="comment_content" class="comment-input" placeholder="Введите ваш комментарий..." required></textarea>
+                    <button type="submit" name="add_comment" class="comment-submit">Отправить</button>
+                </form>
+                <hr>
+            <?php else: ?>        
+                <div class="login-to-comment">
+                    <a href="login.php" style="color: #b0b0b0;">Войдите</a>, чтобы оставить комментарий
+                </div>
+            <?php endif; ?>
+            
+            <div class="comments-wrapper">
+                <?php if (count($comments) > 0): ?>
+                    <?php foreach ($comments as $comment): ?>
+                        <div class="comment-card" data-comment-id="<?php echo $comment['id_c']; ?>">
+                            <div class="comment-header">
+                                <span class="comment-author"><?php echo htmlspecialchars($comment['comment_author']); ?></span>
+                                <span class="comment-date">
+                                    <?php echo isset($comment['created_at']) ? date('d.m.Y H:i', strtotime($comment['created_at'])) : 'только что'; ?>
+                                </span>
+                            </div>
+                            <p class="comment-content">
+                                <?php echo nl2br(htmlspecialchars($comment['content'])); ?>
+                            </p>
+                            <?php if ($currentUserId == $comment['author_id']): ?>
+                                <div class="comment-actions">
+                                    <button class="comment-delete-btn delete-comment-btn" data-comment-id="<?php echo $comment['id_c']; ?>">
+                                        Удалить
+                                    </button>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="no-comments">Пока нет комментариев. Будьте первым!</p>
+                <?php endif; ?>
+            </div>
+        </div>
+        </div>
 <?php endif; ?>
 
 <script src="JS/post_rating.js"></script>

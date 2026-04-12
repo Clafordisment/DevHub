@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 12 2026 г., 18:18
+-- Время создания: Апр 12 2026 г., 22:47
 -- Версия сервера: 5.6.37
 -- Версия PHP: 5.5.38
 
@@ -42,9 +42,7 @@ CREATE TABLE `Comments` (
 --
 
 INSERT INTO `Comments` (`id_c`, `id_p`, `id_u`, `content`, `created_at`, `likes_count`) VALUES
-(20, 6, 5, 'А я вочиноубароу', '2026-03-18 16:40:22', 0),
-(34, 11, 6, 'Оставил', '2026-04-12 18:08:19', 1),
-(35, 11, 6, 'Комментарий', '2026-04-12 18:10:40', 1);
+(20, 6, 5, 'А я вочиноубароу', '2026-03-18 16:40:22', 0);
 
 -- --------------------------------------------------------
 
@@ -58,14 +56,6 @@ CREATE TABLE `comments_likes` (
   `id_u` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Дамп данных таблицы `comments_likes`
---
-
-INSERT INTO `comments_likes` (`id_l`, `id_c`, `id_u`, `created_at`) VALUES
-(5, 34, 6, '2026-04-12 15:08:28'),
-(6, 35, 6, '2026-04-12 15:10:48');
 
 -- --------------------------------------------------------
 
@@ -82,7 +72,7 @@ CREATE TABLE `Posts` (
   `create_at` timestamp NOT NULL COMMENT 'дата создания',
   `avRate` float DEFAULT NULL,
   `isNote` tinyint(1) DEFAULT NULL,
-  `ownPrev` blob
+  `ownPrev` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
