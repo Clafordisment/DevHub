@@ -46,7 +46,7 @@ if ($postId > 0) {
             c.id_c,
             c.content,
             c.created_at,
-            с.likes_count,
+            c.likes_count,
             COALESCE(NULLIF(u.username, ''), u.login) AS comment_author,
             u.Id_U as author_id
         FROM Comments c

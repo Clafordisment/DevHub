@@ -25,12 +25,16 @@ if ($postId <= 0 || $rating < 0 || $rating > 5) {
     exit;
 }
 
-$host = "localhost";
-$user = "root";
-$pass = "";
-$dbname = "DevHub_mainDB";
+require_once 'config.php';
 
-$conn = new mysqli($host, $user, $pass, $dbname);
+$conn = new mysqli(
+    $config['db_host'],
+    $config['db_user'],
+    $config['db_pass'],
+    $config['db_name']
+);
+$conn->set_charset("utf8");
+
 $conn->set_charset("utf8");
 
 $userId = (int)$_SESSION['user_id'];

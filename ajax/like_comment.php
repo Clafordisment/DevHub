@@ -24,13 +24,16 @@ if ($commentId <= 0) {
     echo json_encode(['success' => false, 'error' => 'Не указан ID комментария']);
     exit;
 }
+require_once 'config.php';
 
-$host = "localhost";
-$user = "root";
-$pass = "";
-$dbname = "DevHub_mainDB";
+$conn = new mysqli(
+    $config['db_host'],
+    $config['db_user'],
+    $config['db_pass'],
+    $config['db_name']
+);
+$conn->set_charset("utf8");
 
-$conn = new mysqli($host, $user, $pass, $dbname);
 $conn->set_charset("utf8");
 
 $checkSql = "SELECT id_l FROM comments_likes WHERE id_c = $commentId AND id_u = $userId";
