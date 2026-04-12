@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 12 2026 г., 16:15
+-- Время создания: Апр 12 2026 г., 18:18
 -- Версия сервера: 5.6.37
 -- Версия PHP: 5.5.38
 
@@ -42,7 +42,9 @@ CREATE TABLE `Comments` (
 --
 
 INSERT INTO `Comments` (`id_c`, `id_p`, `id_u`, `content`, `created_at`, `likes_count`) VALUES
-(20, 6, 5, 'А я вочиноубароу', '2026-03-18 16:40:22', 0);
+(20, 6, 5, 'А я вочиноубароу', '2026-03-18 16:40:22', 0),
+(34, 11, 6, 'Оставил', '2026-04-12 18:08:19', 1),
+(35, 11, 6, 'Комментарий', '2026-04-12 18:10:40', 1);
 
 -- --------------------------------------------------------
 
@@ -57,6 +59,14 @@ CREATE TABLE `comments_likes` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `comments_likes`
+--
+
+INSERT INTO `comments_likes` (`id_l`, `id_c`, `id_u`, `created_at`) VALUES
+(5, 34, 6, '2026-04-12 15:08:28'),
+(6, 35, 6, '2026-04-12 15:10:48');
+
 -- --------------------------------------------------------
 
 --
@@ -67,7 +77,7 @@ CREATE TABLE `Posts` (
   `id_p` int(11) NOT NULL,
   `id_type` int(11) DEFAULT NULL,
   `id_u` int(11) NOT NULL,
-  `title` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'заголовок',
+  `title` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'заголовок',
   `content` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'содержание',
   `create_at` timestamp NOT NULL COMMENT 'дата создания',
   `avRate` float DEFAULT NULL,
@@ -83,7 +93,9 @@ INSERT INTO `Posts` (`id_p`, `id_type`, `id_u`, `title`, `content`, `create_at`,
 (6, 1, 2, 'Какой-то опубликован', 'Сгенеренный текст из ворда (путём =rand()):\r\nВидео предоставляет прекрасную возможность подтвердить свою точку зрения. Чтобы вставить код внедрения для видео, которое вы хотите добавить, нажмите \"Видео в сети\".Вы также можете ввести ключевое слово, чтобы найти в Интернете видео, которое лучше всего подходит для вашего документа.\r\nЧтобы придать документу профессиональный вид, воспользуйтесь доступными в Word макетами верхних и нижних колонтитулов, титульной страницы и текстовых полей, которые дополняют друг друга. Например, вы можете добавить подходящую титульную страницу, верхний колонтитул и боковое примечание. Откройте вкладку \"Вставка\" и выберите нужные элементы из различных коллекций.\r\nТемы и стили также помогают придать документу единообразный вид. Если на вкладке \"Конструктор\" выбрать другую тему, то изображения, диаграммы и графические элементы SmartArt изменятся соответствующим образом.При применении стилей заголовки изменяются в соответствии с новой темой.\r\nНовые кнопки, которые видны, только если они действительно нужны, экономят время при работе в Word.Чтобы изменить расположение рисунка в документе, щелкните его, и рядом с ним появится кнопка для доступа к параметрам разметки. При работе с таблицей щелкните то место, куда нужно добавить строку или столбец, и щелкните знак \"плюс\".\r\nЧитать тоже стало проще благодаря новому режиму чтения. Можно свернуть части документа, чтобы сосредоточиться на нужном фрагменте текста. Если вы прервете чтение, не дойдя до конца документа, Word запомнит, в каком месте вы остановились (даже на другом устройстве).', '2026-03-09 19:24:40', 0, 0, ''),
 (8, 1, 2, 'УАщшцтацута', 'УАЦЩРШшртуацацдтлуцу', '2026-03-11 13:34:47', 4, 0, ''),
 (9, 1, 2, 'Какой то черновик', 'И какой то текст черновика', '2026-03-12 18:07:40', 0, 1, ''),
-(10, 1, 2, 'Ещё черновичок', 'Бу', '2026-03-12 18:21:24', 0, 1, '');
+(10, 1, 2, 'Ещё черновичок', 'Бу', '2026-03-12 18:21:24', 0, 1, ''),
+(11, 1, 6, 'Что то о вёрстке и H', 'Лень придумывать и генерить, просто текст окей да', '2026-04-12 14:03:48', 4.5, 0, ''),
+(12, 1, 6, 'Тест черновика на сохренение тегов', 'Тун тун тун владун', '2026-04-12 14:33:04', 0, 1, '');
 
 -- --------------------------------------------------------
 
@@ -123,7 +135,8 @@ CREATE TABLE `post_rates` (
 --
 
 INSERT INTO `post_rates` (`id_r`, `id_p`, `id_u`, `rate`, `created_at`) VALUES
-(1, 8, 6, 4, '2026-04-09 13:43:52');
+(1, 8, 6, 4, '2026-04-09 13:43:52'),
+(2, 11, 6, 4.5, '2026-04-12 14:37:00');
 
 -- --------------------------------------------------------
 
@@ -233,6 +246,23 @@ CREATE TABLE `tags_posts` (
   `id_p` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `tags_posts`
+--
+
+INSERT INTO `tags_posts` (`id_t&p`, `id_t`, `id_p`) VALUES
+(25, 1, 12),
+(2, 6, 11),
+(24, 9, 12),
+(27, 12, 12),
+(26, 15, 12),
+(1, 17, 11),
+(3, 18, 11),
+(4, 28, 11),
+(5, 33, 11),
+(6, 42, 11),
+(7, 43, 11);
+
 -- --------------------------------------------------------
 
 --
@@ -340,17 +370,17 @@ ALTER TABLE `Users`
 -- AUTO_INCREMENT для таблицы `Comments`
 --
 ALTER TABLE `Comments`
-  MODIFY `id_c` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_c` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT для таблицы `comments_likes`
 --
 ALTER TABLE `comments_likes`
-  MODIFY `id_l` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_l` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT для таблицы `Posts`
 --
 ALTER TABLE `Posts`
-  MODIFY `id_p` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_p` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT для таблицы `posts_catg`
 --
@@ -360,7 +390,7 @@ ALTER TABLE `posts_catg`
 -- AUTO_INCREMENT для таблицы `post_rates`
 --
 ALTER TABLE `post_rates`
-  MODIFY `id_r` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_r` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `Tags`
 --
@@ -375,7 +405,7 @@ ALTER TABLE `tags_catg`
 -- AUTO_INCREMENT для таблицы `tags_posts`
 --
 ALTER TABLE `tags_posts`
-  MODIFY `id_t&p` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_t&p` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT для таблицы `Users`
 --
