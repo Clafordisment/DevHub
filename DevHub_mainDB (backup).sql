@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 10 2026 г., 13:29
+-- Время создания: Апр 12 2026 г., 16:15
 -- Версия сервера: 5.6.37
 -- Версия PHP: 5.5.38
 
@@ -42,8 +42,7 @@ CREATE TABLE `Comments` (
 --
 
 INSERT INTO `Comments` (`id_c`, `id_p`, `id_u`, `content`, `created_at`, `likes_count`) VALUES
-(20, 6, 5, 'А я вочиноубароу', '2026-03-18 16:40:22', 0),
-(23, 8, 6, 'ewf', '2026-04-09 16:51:31', 0);
+(20, 6, 5, 'А я вочиноубароу', '2026-03-18 16:40:22', 0);
 
 -- --------------------------------------------------------
 
@@ -208,18 +207,19 @@ INSERT INTO `Tags` (`id_t`, `name`, `id_catg`) VALUES
 CREATE TABLE `tags_catg` (
   `id_catg` int(11) NOT NULL,
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `sort_order` int(11) DEFAULT '0'
+  `sort_order` int(11) DEFAULT '0',
+  `color_code` varchar(7) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `tags_catg`
 --
 
-INSERT INTO `tags_catg` (`id_catg`, `name`, `sort_order`) VALUES
-(1, 'Языки программирования', 1),
-(2, 'Модели ИИ', 2),
-(3, 'Ассистенты и агенты', 3),
-(4, 'Платформы разработки и деплоя', 4);
+INSERT INTO `tags_catg` (`id_catg`, `name`, `sort_order`, `color_code`) VALUES
+(1, 'Языки программирования', 1, '#ffff00'),
+(2, 'Модели ИИ', 2, '#0000ff'),
+(3, 'Ассистенты и агенты', 3, '#00ffff'),
+(4, 'Платформы разработки и деплоя', 4, '#6aa84f');
 
 -- --------------------------------------------------------
 
@@ -340,7 +340,7 @@ ALTER TABLE `Users`
 -- AUTO_INCREMENT для таблицы `Comments`
 --
 ALTER TABLE `Comments`
-  MODIFY `id_c` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_c` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT для таблицы `comments_likes`
 --

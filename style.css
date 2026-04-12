@@ -709,3 +709,37 @@ hr {
 .like-count {
     font-size: 12px;
 }
+
+.category-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.category-btn {
+    flex: 1;
+    max-width: 300px;
+    background-color: #2a2a2a;
+    color: #b0b0b0;
+    border: none;
+    padding: 12px 25px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+}
+
+.category-btn:hover {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+.category-btn.active {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}

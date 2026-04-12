@@ -64,11 +64,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $stmt->close();
         } else {
+            $id_type = 1; // 1 = Разработка, позже будет добавлена функция выбора категории
+
             $stmt = $conn->prepare("
                 INSERT INTO Posts (id_type, id_u, title, content, create_at, avRate, isNote, ownPrev)
-                VALUES (0, ?, ?, ?, NOW(), 0, ?, '')
+                VALUES (?, ?, ?, ?, NOW(), 0, ?, '')
             ");
-            $stmt->bind_param("issi", $userId, $title, $content, $isNote);
+            $stmt->bind_param("iissi", $id_type, $userId, $title, $content, $isNote);
             $stmt->execute();
             $stmt->close();
         }
