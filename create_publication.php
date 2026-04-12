@@ -8,12 +8,14 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$host = "localhost";
-$user = "root";
-$pass = "";
-$dbname = "DevHub_mainDB";
+require_once 'config.php';
 
-$conn = new mysqli($host, $user, $pass, $dbname);
+$conn = new mysqli(
+    $config['db_host'],
+    $config['db_user'],
+    $config['db_pass'],
+    $config['db_name']
+);
 $conn->set_charset("utf8");
 
 $userId = (int)$_SESSION['user_id'];
@@ -84,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require_once 'header.php';
 ?>
 
-<div class="box" style="width: 800px;">
+<div class="box">
     <h2>Создать новую публикацию</h2>
     <form method="POST">
         <input type="hidden" name="draft_id" value="<?php echo $editingDraft ? (int)$draftIdFromGet : 0; ?>">

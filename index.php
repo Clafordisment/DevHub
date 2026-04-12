@@ -2,12 +2,14 @@
 $page_title = "DevHub | Главная";
 require_once 'header.php';
 
-$host = "localhost";
-$user = "root";
-$pass = "";
-$dbname = "DevHub_mainDB";
+require_once 'config.php';
 
-$conn = new mysqli($host, $user, $pass, $dbname);
+$conn = new mysqli(
+    $config['db_host'],
+    $config['db_user'],
+    $config['db_pass'],
+    $config['db_name']
+);
 $conn->set_charset("utf8");
 
 $sql = "
