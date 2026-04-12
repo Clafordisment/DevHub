@@ -24,6 +24,7 @@ if ($postId > 0) {
             p.id_p,
             p.title,
             p.content,
+            p.id_type,
             COALESCE(NULLIF(u.username, ''), u.login) AS author_name,
             p.create_at,
             p.avRate
@@ -36,6 +37,34 @@ if ($postId > 0) {
     $result = $conn->query($sql);
     if ($result && $result->num_rows > 0) {
         $post = $result->fetch_assoc();
+    }
+}
+
+$categoryName = '';
+if ($postId > 0 && isset($post['id_type']) && $post['id_type'] > 0) {
+    $catSql = "SELECT name FROM posts_catg WHERE id_PType = " . (int)$post['id_type'];
+    $catResult = $conn->query($catSql);
+    if ($catResult && $catResult->num_rows > 0) {
+        $catRow = $catResult->fetch_assoc();
+        $categoryName = $catRow['name'];
+    }
+}
+
+$postTags = [];
+if ($postId > 0) {
+    $tagsSql = "
+        SELECT t.id_t, t.name, tc.name as category_name, tc.color_code
+        FROM tags_posts tp
+        JOIN Tags t ON tp.id_t = t.id_t
+        JOIN tags_catg tc ON t.id_catg = tc.id_catg
+        WHERE tp.id_p = {$postId}
+        ORDER BY tc.sort_order, t.name
+    ";
+    $tagsResult = $conn->query($tagsSql);
+    if ($tagsResult) {
+        while ($row = $tagsResult->fetch_assoc()) {
+            $postTags[] = $row;
+        }
     }
 }
 
@@ -84,11 +113,7 @@ if ($postId > 0 && isset($_SESSION['user_id'])) {
         $userRating = (float)$userRateData['rate'];
     }
 }
-
-
 ?>
-
-
 
 <div id="post-data" 
      data-post-id="<?php echo $postId; ?>" 
@@ -105,9 +130,34 @@ if ($postId > 0 && isset($_SESSION['user_id'])) {
                 <?php echo htmlspecialchars($post['title']); ?>
             </h1>
         </div>
+        
         <div class="post-full-author">
             Автор: <?php echo htmlspecialchars($post['author_name']); ?>
         </div>
+        
+        <!-- Блок с категорией и тегами -->
+        <div class="post-meta">
+            <?php if (!empty($categoryName)): ?>
+            <div class="post-category">
+                <span class="post-meta-label">Категория:</span>
+                <span class="post-meta-value"><?php echo htmlspecialchars($categoryName); ?></span>
+            </div>
+            <?php endif; ?>
+            
+            <?php if (!empty($postTags)): ?>
+            <div class="post-tags">
+                <span class="post-meta-label">Теги:</span>
+                <div class="post-tags-list">
+                    <?php foreach ($postTags as $tag): ?>
+                        <span class="post-tag-item" style="border-color: <?php echo $tag['color_code']; ?>; background-color: <?php echo $tag['color_code']; ?>20;">
+                            <?php echo htmlspecialchars($tag['name']); ?>
+                        </span>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+        
         <div class="post-full-content">
             <?php echo nl2br(htmlspecialchars($post['content'])); ?>
         </div>
@@ -122,7 +172,7 @@ if ($postId > 0 && isset($_SESSION['user_id'])) {
 </div>
 
 <?php if ($post): ?>
-<div class="rating-container" data-post-id="<?php echo $postId; ?> "data-user-rating="<?php echo $userRating; ?>">
+<div class="rating-container" data-post-id="<?php echo $postId; ?>" data-user-rating="<?php echo $userRating; ?>">
     <div class="rating-title">Оцените публикацию</div>
     <div class="stars" id="star-rating">
         <span class="star" data-value="1">☆</span>
@@ -136,101 +186,6 @@ if ($postId > 0 && isset($_SESSION['user_id'])) {
         <span class="rating-votes">(<?php echo $votesCount; ?> голосов)</span>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const stars = document.querySelectorAll('.star');
-    const ratingContainer = document.querySelector('.rating-container');
-    const ratingCurrent = document.querySelector('.rating-current');
-    const ratingVotes = document.querySelector('.rating-votes');
-    let currentRating = parseFloat(ratingContainer.dataset.userRating) || 0;
-
-    if(currentRating > 0) {
-        highlightStars(currentRating);
-    }    
-
-    stars.forEach(star => {
-        star.addEventListener('mouseenter', function() {
-            const value = parseInt(this.dataset.value);
-            highlightStars(value);
-        });
-        
-        star.addEventListener('mousemove', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const width = rect.width;
-            const value = parseInt(this.dataset.value);
-            if (x < width / 2) {
-                highlightStars(value - 0.5);
-            } else {
-                highlightStars(value);
-            }
-        });
-        
-        star.addEventListener('click', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const width = rect.width;
-            const value = parseInt(this.dataset.value);
-            let rating = (x < width / 2) ? value - 0.5 : value;
-            submitRating(rating);
-        });
-        
-        star.addEventListener('mouseleave', function() {
-            highlightStars(currentRating);
-        });
-    });
-    
-    function highlightStars(rating) {
-        stars.forEach(star => {
-            const starValue = parseInt(star.dataset.value);
-            star.textContent = '☆';
-            star.classList.remove('active');
-            if (rating >= starValue) {
-                star.textContent = '★';
-                star.classList.add('active');
-            } else if (rating > starValue - 1 && rating < starValue) {
-                star.textContent = '★';
-                star.classList.add('active');
-            }
-        });
-    }
-    
-    async function submitRating(rating) {
-        const postId = ratingContainer.dataset.postId;
-        try {
-            const response = await fetch('ajax/rate_post.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ post_id: postId, rating: rating })
-            });
-            const data = await response.json();
-            if (data.success) {
-                currentRating = rating;
-                highlightStars(rating);
-                ratingCurrent.textContent = data.avg_rating;
-                ratingVotes.textContent = `(${data.votes_count} голосов)`;
-                showRatingMessage('Оценка сохранена!', 'ok');
-            } else {
-                showRatingMessage(data.error || 'Ошибка', 'err');
-            }
-        } catch (error) {
-            showRatingMessage('Ошибка соединения', 'err');
-        }
-    }
-    
-    function showRatingMessage(text, type) {
-        const oldMsg = document.querySelector('.rating-message');
-        if (oldMsg) oldMsg.remove();
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `msg ${type} rating-message`;
-        messageDiv.textContent = text;
-        messageDiv.style.marginTop = '10px';
-        ratingContainer.appendChild(messageDiv);
-        setTimeout(() => messageDiv.remove(), 3000);
-    }
-});
-</script>
 
 <div class="box" style="margin-top: 0; border-radius: 12px;">
     <h2 style="text-align: left; margin-bottom: 25px;">Комментарии</h2>
@@ -277,4 +232,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <?php endif; ?>
 
+<script src="JS/post_rating.js"></script>
 <script src="JS/comments_ajax.js"></script>
