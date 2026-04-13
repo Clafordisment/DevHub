@@ -1,0 +1,126 @@
+/*стили верхней навигации*/
+
+.top-nav {
+    background-color: #1a1a1a;
+    width: auto;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 0;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    height: 60px;
+}
+
+.nav-item {
+    position: relative;
+    margin-right: 30px;
+}
+
+.nav-item a {
+    color: #b0b0b0;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.nav-item a:hover {
+    color: #ffffff;
+    background-color: #2a2a2a;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #1a1a1a;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    border-radius: 6px;
+    border: 1px solid #2a2a2a;
+    top: 100%;
+    left: 0;
+}
+
+.dropdown-content a {
+    color: #b0b0b0;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.nav-item .disabled-link {
+    color: #474747;
+    pointer-events: none;
+    cursor: default;
+    background-color: transparent;
+}
+
+.nav-item .disabled-link:hover {
+    color: #474747;
+    background-color: transparent;
+}
+
+.nav-search {
+    flex-grow: 1;
+    margin: 0 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #2a2a2a;
+    border: 1px solid #444444;
+    border-radius: 6px;
+    color: #e0e0e0;
+    font-size: 14px;
+    transition: border-color 0.5s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #666666;
+}
+
+.right-dropdown {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.user-dropbtn {
+    background-color: #2a2a2a;
+    color: #b0b0b0;
+    padding: 8px 20px;
+    border-radius: 20px;
+}
+
+.user-dropbtn:hover {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}

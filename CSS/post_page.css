@@ -1,0 +1,96 @@
+/*страница отдельного поста*/
+
+.post-full-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: #2a2a2a;
+    color: #b0b0b0;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.back-button:hover {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+.post-full-title {
+    font-size: 56px;
+    margin: 0;
+    color: #ffffff;
+}
+
+.post-full-author {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #b0b0b0;
+}
+
+.post-full-date {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #b0b0b0;
+}
+
+.post-full-date .post-meta-label {
+    color: #888888;
+    margin-right: 10px;
+}
+
+.post-full-date .post-meta-value {
+    color: #b0b0b0;
+}
+
+.post-full-content {
+    font-size: 26px;
+    line-height: 1.5;
+    color: #e0e0e0;
+    white-space: pre-wrap;
+}
+
+.post-meta {
+    margin: 15px 0;
+    padding: 10px 0;
+    border-top: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+}
+
+.post-category {
+    margin-bottom: 10px;
+}
+
+.post-meta-label {
+    color: #888888;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.post-meta-value {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.post-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.post-tag-item {
+    background-color: #2a2a2a;
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    display: inline-block;
+}

@@ -1,0 +1,38 @@
+/*основные контейнеры*/
+
+.container {
+    margin: 20px auto;
+    margin-bottom: 100px;
+    width: 100%;
+    max-width: 1300px;
+    min-width: 320px;
+    background-color: #1a1a1a;
+    border-radius: 0 0 12px 12px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    animation: glow 10s infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+    100% {
+        box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+    }
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 280px;
+    max-width: 100%;
+    margin: 20px auto;
+    background-color: #1a1a1a;
+    padding: 30px;
+    justify-content: center;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    animation: glow 10s infinite alternate;
+}

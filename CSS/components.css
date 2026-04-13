@@ -1,0 +1,114 @@
+/*кнопки, формы, сообщения*/
+
+.input-zone {
+    background-color: #2a2a2a;
+    border: 1px solid #444444;
+    color: #e0e0e0;
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    width: 100%;
+    max-width: 800px;
+    text-align: left;
+    margin: 10px 0;
+    transition: border-color 0.5s ease;
+}
+
+.input-zone:focus {
+    outline: none;
+    border-color: #666666;
+}
+
+.button {
+    background-color: #2a2a2a;
+    color: #b0b0b0;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 10px 0;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.new-publication-btn {
+    background-color: #2a2a2a;
+    color: #b0b0b0;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 10px;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.button:hover,
+.new-publication-btn:hover {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+.msg {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.ok {
+    background: rgba(120, 255, 120, 0.1);
+    border: 1px solid rgba(120, 255, 120, 0.3);
+    color: #78ff78;
+}
+
+.err {
+    background: rgba(255, 120, 120, 0.1);
+    border: 1px solid rgba(255, 120, 120, 0.3);
+    color: #ff7878;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 16px;
+    background-color: #2a2a2a;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #b0b0b0;
+    transition: background 0.3s;
+}
+
+.back-link:hover {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+.danger-button {
+    background-color: rgba(255, 50, 50, 0.1);
+    color: #ff5050;
+    border: 1px solid rgba(255, 50, 50, 0.3);
+}
+
+.danger-button:hover {
+    background-color: rgba(255, 50, 50, 0.2);
+    color: #ff3030;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-actions .button {
+    margin: 0;
+}
+
+hr {
+    margin: 25px 0;
+    border: 0;
+    border-top: 1px solid #333333;
+}

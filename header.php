@@ -8,7 +8,19 @@ if (session_status() === PHP_SESSION_NONE) {
 <head>
     <meta charset="UTF-8">
     <title><?php echo isset($page_title) ? $page_title : 'DevHub'; ?></title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="CSS/main.css">
+    <link rel="stylesheet" href="CSS/nav.css">
+    <link rel="stylesheet" href="CSS/layout.css">
+    <link rel="stylesheet" href="CSS/components.css">
+    <link rel="stylesheet" href="CSS/typography.css">
+    <link rel="stylesheet" href="CSS/post_cards.css">
+    <link rel="stylesheet" href="CSS/post_page.css">
+    <link rel="stylesheet" href="CSS/comments.css">
+    <link rel="stylesheet" href="CSS/rating.css">
+    <link rel="stylesheet" href="CSS/categories.css">
+    <link rel="stylesheet" href="CSS/search.css">
+    <link rel="stylesheet" href="CSS/modal_overlay.css">
+    <link rel="stylesheet" href="CSS/create_pub_forms.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>

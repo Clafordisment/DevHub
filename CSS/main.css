@@ -1,0 +1,32 @@
+/*сброс стилей и глобальные коды цветов*/
+
+.listOfColors {
+    color: #0a0a0a;
+    color: #1a1a1a;
+    color: #2a2a2a;
+    color: #333333;
+    color: #444444;
+    color: #666666;
+    color: #b0b0b0;
+    color: #e0e0e0;
+    color: #ffffff;
+}
+
+* {
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+body {
+    background-color: #0a0a0a;
+    min-height: 90vh;
+    min-width: 150vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    flex-direction: column;
+}
