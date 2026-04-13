@@ -1,8 +1,8 @@
 <?php
 $page_title = "DevHub | Главная";
 require_once 'header.php';
-
 require_once 'config.php';
+require_once 'search_engine_mdl.php';
 
 $conn = new mysqli(
     $config['db_host'],
@@ -23,67 +23,12 @@ if ($catgResult) {
 
 $selectedCategory = isset($_GET['category']) ? (int)$_GET['category'] : 0;
 
-if ($selectedCategory > 0) {
-    $sql = "
-        SELECT 
-            p.id_p, 
-            p.title, 
-            p.ownPrev,
-            COALESCE(NULLIF(u.username, ''), u.login) AS author_name
-        FROM Posts p
-        JOIN Users u ON p.id_u = u.Id_U
-        WHERE p.isNote = 0 AND p.id_type = $selectedCategory
-        ORDER BY p.create_at DESC 
-    ";
-} else {
-    $sql = "
-        SELECT 
-            p.id_p, 
-            p.title, 
-            p.ownPrev,
-            COALESCE(NULLIF(u.username, ''), u.login) AS author_name
-        FROM Posts p
-        JOIN Users u ON p.id_u = u.Id_U
-        WHERE p.isNote = 0
-        ORDER BY p.create_at DESC 
-    ";
-}
+$searchEngine = new SearchEngine($conn);
+$posts = $searchEngine->search('', ['category' => $selectedCategory]);
 
-$result = $conn->query($sql);
-
-$posts = [];
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $postId = $row['id_p'];
-        
-        $tagsSql = "
-            SELECT t.name, tc.color_code
-            FROM tags_posts tp
-            JOIN Tags t ON tp.id_t = t.id_t
-            JOIN tags_catg tc ON t.id_catg = tc.id_catg
-            WHERE tp.id_p = $postId
-            ORDER BY tc.sort_order, t.name
-        ";
-        $tagsResult = $conn->query($tagsSql);
-        $allTags = [];
-        if ($tagsResult) {
-            while ($tagRow = $tagsResult->fetch_assoc()) {
-                $allTags[] = $tagRow;
-            }
-        }
-        
-        $tags = [];
-        if (count($allTags) > 0) {
-            shuffle($allTags); 
-            $tags = array_slice($allTags, 0, 3);  
-        }
-        
-        $row['tags'] = $tags;
-        $posts[] = $row;
-    }
-}
+$conn->close();
 ?>
-<div class="container" style="background-color: #1a1a1a00; box-shadow: none; animation: none; margin: 0px;">
+
 <div class="box">
     <h2>Публикации DevHub</h2>
 
@@ -114,7 +59,7 @@ if ($result && $result->num_rows > 0) {
                                     <?php echo htmlspecialchars($row['title']); ?>
                                 </div>
                                 <div class="post-card-author">
-                                    Автор: <?php echo htmlspecialchars($row['author_name']); ?>
+                                    <?php echo htmlspecialchars($row['author_name']); ?>
                                 </div>
                                 <?php if (!empty($row['tags'])): ?>
                                     <div class="post-card-tags">
@@ -137,8 +82,9 @@ if ($result && $result->num_rows > 0) {
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <p>По данной категории публикаций нет.</p>
+            <p>По вашему запросу ничего не найдено.</p>
         <?php endif; ?>
     </div>
 </div>
-</div>
+
+<script src="JS/search_ui.js"></script>

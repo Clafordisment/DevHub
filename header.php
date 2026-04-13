@@ -31,8 +31,8 @@ if (session_status() === PHP_SESSION_NONE) {
             <?php endif; ?>
         </div>
         
-        <div class="nav-search">
-            <input type="text" placeholder="Поиск публикаций..." class="search-input">
+        <div class="nav-search search-container">
+            <input type="text" placeholder="Поиск публикаций..." class="search-input" id="search-input">
         </div>
         
         <div class="nav-item dropdown right-dropdown">
