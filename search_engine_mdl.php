@@ -25,21 +25,17 @@ class SearchEngine {
         $keywords = preg_split('/\s+/', mb_strtolower($query));
         $keywords = array_unique($keywords);
         
-        //Получение всех постов
         $posts = $this->getAllPostsForSearch($filters);
         
-        //Ранжирование постов
         foreach ($posts as &$post) {
             $post['weight'] = $this->calculateWeight($post, $keywords);
         }
         
-        //Сортировка по весу (по убыванию)
         usort($posts, function($a, $b) {
             if ($a['weight'] == $b['weight']) return 0;
             return ($a['weight'] < $b['weight']) ? 1 : -1;
         });
         
-        //Фильтруем посты с нулевым весом
         $posts = array_filter($posts, function($post) {
             return $post['weight'] > 0;
         });
@@ -126,16 +122,22 @@ class SearchEngine {
             JOIN Tags t ON tp.id_t = t.id_t
             JOIN tags_catg tc ON t.id_catg = tc.id_catg
             WHERE tp.id_p = $postId
-            ORDER BY tc.sort_order, t.name
-            LIMIT 3
         ";
         $tagsResult = $this->conn->query($tagsSql);
-        $tags = [];
+        $allTags = [];
         if ($tagsResult) {
             while ($tagRow = $tagsResult->fetch_assoc()) {
-                $tags[] = $tagRow;
+                $allTags[] = $tagRow;
             }
         }
+        
+        // Рандомный выбор 3 тегов
+        $tags = [];
+        if (count($allTags) > 0) {
+            shuffle($allTags);  // ← перемешиваем массив
+            $tags = array_slice($allTags, 0, 3);  // ← берём первые 3
+        }
+        
         return $tags;
     }
     
