@@ -53,12 +53,12 @@ if (!$user) {
                 <h3>DevHub Admin</h3>
             </div>
             <ul class="admin-sidebar-menu">
-                <li><a href="adm_index.php" <?php echo ($active_page == 'dashboard') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Graph-lightVer.gif" alt="📊" class="nav-icon" style="width: 35px; height: 35px;"> Главная</a></li>
-                <li><a href="adm_users.php" <?php echo ($active_page == 'users') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Users-lightVer.gif" alt="👥" class="nav-icon" style="width: 35px; height: 35px;"> Пользователи</a></li>
-                <li><a href="adm_posts.php" <?php echo ($active_page == 'posts') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Post-lightVer.gif" alt="📝" class="nav-icon" style="width: 35px; height: 35px;"> Посты</a></li>
-                <li><a href="adm_tags.php" <?php echo ($active_page == 'tags') ? 'class="active"' : ''; ?>><img src="../icons/static/ic-Tag_framed-darkVer.png" alt="🏷️" class="nav-icon" style="width: 35px; height: 35px;"> Теги</a></li>
-                <li><a href="adm_comments.php" <?php echo ($active_page == 'comments') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Comment-lightVer.gif" alt="💬" class="nav-icon" style="width: 35px; height: 35px;"> Комментарии</a></li>
-                <li><a href="../logout.php" class="logout"><img src="../icons/anim/light/ic-Exit-lightVer.gif" alt="🚪" class="nav-icon" style="width: 35px; height: 35px;"> Выход</a></li>
+                <li><a href="adm_index.php" <?php echo ($active_page == 'dashboard') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Graph.gif" alt="📊" class="nav-icon" style="width: 35px; height: 35px;"> Главная</a></li>
+                <li><a href="adm_users.php" <?php echo ($active_page == 'users') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Users.gif" alt="👥" class="nav-icon" style="width: 35px; height: 35px;"> Пользователи</a></li>
+                <li><a href="adm_posts.php" <?php echo ($active_page == 'posts') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Post.gif" alt="📝" class="nav-icon" style="width: 35px; height: 35px;"> Посты</a></li>
+                <li><a href="adm_tags.php" <?php echo ($active_page == 'tags') ? 'class="active"' : ''; ?>><img src="../icons/static/ic-Tag_framed.png" alt="🏷️" class="nav-icon" style="width: 35px; height: 35px;"> Теги</a></li>
+                <li><a href="adm_comments.php" <?php echo ($active_page == 'comments') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon" style="width: 35px; height: 35px;"> Комментарии</a></li>
+                <li><a href="../logout.php" class="logout"><img src="../icons/anim/ic-Exit.gif" alt="🚪" class="nav-icon" style="width: 35px; height: 35px;"> Выход</a></li>
             </ul>
         </nav>
         
@@ -71,7 +71,7 @@ if (!$user) {
             <div class="admin-user-profile">
                 <div class="admin-user-info">
                     <div class="admin-user-avatar">
-                        <div class="admin-avatar-placeholder"><img src="../icons/anim/light/ic-User-lightVer.gif" alt="👤" class="nav-icon" style="width: 35px; height: 35px;"></div>
+                        <div class="admin-avatar-placeholder"><img src="../icons/anim/ic-User.gif" alt="👤" class="nav-icon" style="width: 35px; height: 35px;"></div>
                     </div>
                     <div class="admin-user-details">
                         <h2><?php echo htmlspecialchars($user['login']); ?></h2>

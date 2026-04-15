@@ -62,12 +62,12 @@ $conn->close();
                 <h3>DevHub Admin</h3>
             </div>
             <ul class="admin-sidebar-menu">
-                <li><a href="adm_index.php" <?php echo ($active_page == 'dashboard') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Graph-lightVer.gif" alt="📊" class="nav-icon" style="width: 35px; height: 35px;"> Главная</a></li>
-                <li><a href="adm_users.php" <?php echo ($active_page == 'users') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Users-lightVer.gif" alt="👥" class="nav-icon" style="width: 35px; height: 35px;"> Пользователи</a></li>
-                <li><a href="adm_posts.php" <?php echo ($active_page == 'posts') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Post-lightVer.gif" alt="📝" class="nav-icon" style="width: 35px; height: 35px;"> Посты</a></li>
-                <li><a href="adm_tags.php" <?php echo ($active_page == 'tags') ? 'class="active"' : ''; ?>><img src="../icons/static/ic-Tag_framed-darkVer.png" alt="🏷️" class="nav-icon" style="width: 35px; height: 35px;"> Теги</a></li>
-                <li><a href="adm_comments.php" <?php echo ($active_page == 'comments') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Comment-lightVer.gif" alt="💬" class="nav-icon" style="width: 35px; height: 35px;"> Комментарии</a></li>
-                <li><a href="../logout.php" class="logout"><img src="../icons/anim/light/ic-Exit-lightVer.gif" alt="🚪" class="nav-icon" style="width: 35px; height: 35px;"> Выход</a></li>
+                <li><a href="adm_index.php" <?php echo ($active_page == 'dashboard') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Graph.gif" alt="📊" class="nav-icon" style="width: 35px; height: 35px;"> Главная</a></li>
+                <li><a href="adm_users.php" <?php echo ($active_page == 'users') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Users.gif" alt="👥" class="nav-icon" style="width: 35px; height: 35px;"> Пользователи</a></li>
+                <li><a href="adm_posts.php" <?php echo ($active_page == 'posts') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Post.gif" alt="📝" class="nav-icon" style="width: 35px; height: 35px;"> Посты</a></li>
+                <li><a href="adm_tags.php" <?php echo ($active_page == 'tags') ? 'class="active"' : ''; ?>><img src="../icons/static/ic-Tag_framed.png" alt="🏷️" class="nav-icon" style="width: 35px; height: 35px;"> Теги</a></li>
+                <li><a href="adm_comments.php" <?php echo ($active_page == 'comments') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon" style="width: 35px; height: 35px;"> Комментарии</a></li>
+                <li><a href="../logout.php" class="logout"><img src="../icons/anim/ic-Exit.gif" alt="🚪" class="nav-icon" style="width: 35px; height: 35px;"> Выход</a></li>
             </ul>
         </nav>
         
@@ -83,7 +83,7 @@ $conn->close();
             <div class="admin-filters">
                 <form method="GET" action="" class="admin-filters-form">
                     <input type="text" name="search" class="admin-search-input" placeholder="Поиск по комментариям, авторам или постам..." value="<?php echo htmlspecialchars($search); ?>">
-                    <button type="submit" class="admin-search-btn">🔍 Найти</button>
+                    <button type="submit" class="admin-search-btn"><img src="../icons/anim/ic-Magnifier.gif" alt="🔍" class="nav-icon"> Найти</button>
                     <a href="adm_comments.php" class="admin-reset-btn">Сбросить</a>
                 </form>
             </div>
@@ -118,12 +118,12 @@ $conn->close();
                                         </a>
                                     </td>
                                     <td><?php echo date('d.m.Y H:i', strtotime($comment['created_at'])); ?></td>
-                                    <td>❤️ <?php echo $comment['likes_count']; ?></td>
+                                    <td><img src="../icons/static/ic-Like.png" alt="❤️" class="nav-icon"> <?php echo $comment['likes_count']; ?></td>
                                     <td>
                                         <a href="adm_comments.php?delete=<?php echo $comment['id_c']; ?>" 
                                            class="admin-btn admin-btn-sm admin-btn-danger" 
                                            onclick="return confirm('Удалить комментарий?')">
-                                            🗑️ Удалить
+                                            <img src="../icons/anim/ic-Trash.gif" alt="🗑️" class="nav-icon"> Удалить
                                         </a>
                                     </td>
                                 </tr>

@@ -31,12 +31,12 @@ $conn->close();
                 <h3>DevHub Admin</h3>
             </div>
             <ul class="admin-sidebar-menu">
-                <li><a href="adm_index.php" <?php echo ($active_page == 'dashboard') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Graph-lightVer.gif" alt="📊" class="nav-icon" style="width: 35px; height: 35px;"> Главная</a></li>
-                <li><a href="adm_users.php" <?php echo ($active_page == 'users') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Users-lightVer.gif" alt="👥" class="nav-icon" style="width: 35px; height: 35px;"> Пользователи</a></li>
-                <li><a href="adm_posts.php" <?php echo ($active_page == 'posts') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Post-lightVer.gif" alt="📝" class="nav-icon" style="width: 35px; height: 35px;"> Посты</a></li>
-                <li><a href="adm_tags.php" <?php echo ($active_page == 'tags') ? 'class="active"' : ''; ?>><img src="../icons/static/ic-Tag_framed-darkVer.png" alt="🏷️" class="nav-icon" style="width: 35px; height: 35px;"> Теги</a></li>
-                <li><a href="adm_comments.php" <?php echo ($active_page == 'comments') ? 'class="active"' : ''; ?>><img src="../icons/anim/light/ic-Comment-lightVer.gif" alt="💬" class="nav-icon" style="width: 35px; height: 35px;"> Комментарии</a></li>
-                <li><a href="../logout.php" class="logout"><img src="../icons/anim/light/ic-Exit-lightVer.gif" alt="🚪" class="nav-icon" style="width: 35px; height: 35px;"> Выход</a></li>
+                <li><a href="adm_index.php" <?php echo ($active_page == 'dashboard') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Graph.gif" alt="📊" class="nav-icon" style="width: 35px; height: 35px;"> Главная</a></li>
+                <li><a href="adm_users.php" <?php echo ($active_page == 'users') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Users.gif" alt="👥" class="nav-icon" style="width: 35px; height: 35px;"> Пользователи</a></li>
+                <li><a href="adm_posts.php" <?php echo ($active_page == 'posts') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Post.gif" alt="📝" class="nav-icon" style="width: 35px; height: 35px;"> Посты</a></li>
+                <li><a href="adm_tags.php" <?php echo ($active_page == 'tags') ? 'class="active"' : ''; ?>><img src="../icons/static/ic-Tag_framed.png" alt="🏷️" class="nav-icon" style="width: 35px; height: 35px;"> Теги</a></li>
+                <li><a href="adm_comments.php" <?php echo ($active_page == 'comments') ? 'class="active"' : ''; ?>><img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon" style="width: 35px; height: 35px;"> Комментарии</a></li>
+                <li><a href="../logout.php" class="logout"><img src="../icons/anim/ic-Exit.gif" alt="🚪" class="nav-icon" style="width: 35px; height: 35px;"> Выход</a></li>
             </ul>
         </nav>
         
@@ -76,7 +76,7 @@ $conn->close();
             </div>
             
             <div class="admin-section">
-                <h2><img src="../icons/anim/light/ic-Cup-lightVer.gif" alt="🏆" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 постов по рейтингу</h2>
+                <h2><img src="../icons/anim/ic-Cup.gif" alt="🏆" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 постов по рейтингу</h2>
                 <div class="admin-top-list">
                     <?php 
                     $index = 0;
@@ -97,8 +97,8 @@ $conn->close();
                                 <div class="admin-top-title"><?php echo htmlspecialchars($post['title']); ?></div>
                                 <div class="admin-top-meta">
                                     Автор: <?php echo htmlspecialchars($post['author_name']); ?> | 
-                                    Рейтинг: <img src="../icons/anim/light/ic-Star_rate-lightVer.gif" alt="⭐" class="nav-icon"> <?php echo $post['avRate']; ?> | 
-                                    Комментариев: <img src="../icons/anim/light/ic-Comment-lightVer.gif" alt="💬" class="nav-icon"> <?php echo $post['comments_count']; ?>
+                                    Рейтинг: <img src="../icons/anim/ic-Star_rate.gif" alt="⭐" class="nav-icon"> <?php echo $post['avRate']; ?> | 
+                                    Комментариев: <img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon"> <?php echo $post['comments_count']; ?>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +110,7 @@ $conn->close();
             </div>
             
             <div class="admin-section">
-                <h2><img src="../icons/anim/light/ic-Graph-lightVer.gif" alt="📊" class="nav-icon"> Распределение постов по категориям</h2>
+                <h2><img src="../icons/anim/ic-Graph.gif" alt="📊" class="nav-icon"> Распределение постов по категориям</h2>
                 <div class="admin-category-stats">
                     <?php 
                     $total = 0;
@@ -133,7 +133,7 @@ $conn->close();
 
             <div class="admin-two-columns">
                 <div class="admin-section">
-                    <h2><img src="../icons/anim/light/ic-Comment-lightVer.gif" alt="💬" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 постов по комментариям</h2>
+                    <h2><img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 постов по комментариям</h2>
                     <div class="admin-top-list">
                         <?php 
                         $index = 0;
@@ -154,7 +154,7 @@ $conn->close();
                                     <div class="admin-top-title"><?php echo htmlspecialchars($post['title']); ?></div>
                                     <div class="admin-top-meta">
                                         Автор: <?php echo htmlspecialchars($post['author_name']); ?> | 
-                                        Комментариев: <img src="../icons/anim/light/ic-Comment-lightVer.gif" alt="💬" class="nav-icon"> <?php echo $post['comments_count']; ?>
+                                        Комментариев: <img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon"> <?php echo $post['comments_count']; ?>
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +166,7 @@ $conn->close();
                 </div>
                 
                 <div class="admin-section">
-                    <h2><img src="../icons/static/ic-Crown-lightVer.png" alt="👑" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 авторов</h2>
+                    <h2><img src="../icons/static/ic-Crown.png" alt="👑" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 авторов</h2>
                     <div class="admin-top-list">
                         <?php 
                         $index = 0;
@@ -186,8 +186,8 @@ $conn->close();
                                 <div class="admin-top-content">
                                     <div class="admin-top-title"><?php echo htmlspecialchars($user['name']); ?></div>
                                     <div class="admin-top-meta">
-                                        Постов: <img src="../icons/anim/light/ic-Post-lightVer.gif" alt="📝" class="nav-icon"> <?php echo $user['posts_count']; ?> | 
-                                        Комментариев: <img src="../icons/anim/light/ic-Comment-lightVer.gif" alt="💬" class="nav-icon"> <?php echo $user['comments_count']; ?>
+                                        Постов: <img src="../icons/anim/ic-Post.gif" alt="📝" class="nav-icon"> <?php echo $user['posts_count']; ?> | 
+                                        Комментариев: <img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon"> <?php echo $user['comments_count']; ?>
                                     </div>
                                 </div>
                             </div>
@@ -200,7 +200,7 @@ $conn->close();
             </div>
             
             <div class="admin-section">
-                <h2><img src="../icons/static/ic-Tag_framed-darkVer.png" alt="🏷️" class="nav-icon" style="width: 35px; height: 35px;"> Топ-30 тегов</h2>
+                <h2><img src="../icons/static/ic-Tag_framed.png" alt="🏷️" class="nav-icon" style="width: 35px; height: 35px;"> Топ-30 тегов</h2>
                 <div class="admin-tags-cloud">
                     <?php 
                     $maxUsage = isset($topTags[0]['usage_count']) ? $topTags[0]['usage_count'] : 1;
