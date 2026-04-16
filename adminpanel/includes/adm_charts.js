@@ -86,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         grid: { color: '#333333' },
                         ticks: { 
                             color: '#b0b0b0',
-                            maxRotation: 45,
-                            minRotation: 45
+                            maxRotation: 15,
+                            minRotation: 15
                         }
                     }
                 }
@@ -133,8 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         grid: { color: '#333333' },
                         ticks: { 
                             color: '#b0b0b0',
-                            maxRotation: 45,
-                            minRotation: 45
+                            maxRotation: 15,
+                            minRotation: 15
                         }
                     }
                 }

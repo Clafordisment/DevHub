@@ -100,7 +100,7 @@ if (!$user) {
             </div>
             
             <div class="admin-section">
-                <h2>📝 Посты пользователя</h2>
+                <h2><img src="../icons/anim/ic-Post.gif" alt="📝" class="nav-icon" style="width: 35px; height: 35px;"> Посты пользователя</h2>
                 <div class="admin-table-container">
                     <table class="admin-table">
                         <thead>
@@ -121,8 +121,8 @@ if (!$user) {
                                         <td><?php echo htmlspecialchars($post['title']); ?></td>
                                         <td><?php echo date('d.m.Y H:i', strtotime($post['create_at'])); ?></td>
                                         <td><?php echo $post['isNote'] ? 'Черновик' : 'Опубликован'; ?></td>
-                                        <td>⭐ <?php echo isset($post['avRate']) ? $post['avRate'] : 0; ?></td>
-                                        <td>💬 <?php echo $post['comments_count']; ?></td>
+                                        <td><img src="../icons/anim/ic-Star_rate.gif" alt="⭐" class="nav-icon"> <?php echo isset($post['avRate']) ? $post['avRate'] : 0; ?></td>
+                                        <td><img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon"> <?php echo $post['comments_count']; ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
