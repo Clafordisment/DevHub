@@ -126,7 +126,7 @@ $conn->close();
             <?php endif; ?>
             
             <div class="admin-section">
-                <h2><img src="../icons/static/ic-Add_btn.gif" alt="➕" class="nav-icon" style="width: 35px; height: 35px;"> Добавить новый тег</h2>
+                <h2><img src="../icons/static/ic-Add_btn.png" alt="➕" class="nav-icon" style="width: 35px; height: 35px;"> Добавить новый тег</h2>
                 <form method="POST" class="admin-form">
                     <div class="admin-form-row">
                         <div class="admin-form-group">
@@ -145,7 +145,7 @@ $conn->close();
                             </select>
                         </div>
                         <div class="admin-form-group admin-form-group-btn">
-                            <button type="submit" name="add_tag" class="admin-btn">➕ Добавить</button>
+                            <button type="submit" name="add_tag" class="admin-btn"><img src="../icons/static/ic-Add_btn.png" alt="➕" class="nav-icon"> Добавить</button>
                         </div>
                     </div>
                 </form>

@@ -713,3 +713,49 @@ body {
 .admin-form-group-btn .admin-btn {
     margin: 0;
 }
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333333;
+}
+
+.section-header h2 {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.chart-toggle-btn {
+    background-color: #2a2a2a;
+    border: 1px solid #ffc107;
+    border-radius: 20px;
+    color: #ffc107;
+    padding: 6px 16px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chart-toggle-btn:hover {
+    background-color: #ffc107;
+    color: #1a1a1a;
+}
+
+.chart-wrapper {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    border: 1px solid #333333;
+}
+
+.chart-wrapper canvas,
+.chart-wrapper .plotly-graph-div {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 400px;
+}

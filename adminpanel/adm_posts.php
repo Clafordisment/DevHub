@@ -167,8 +167,8 @@ $conn->close();
                                             <?php echo $post['isNote'] ? 'Черновик' : 'Опубликован'; ?>
                                         </span>
                                     </td>
-                                    <td>⭐ <?php echo isset($post['avRate']) ? $post['avRate'] : 0; ?></td>
-                                    <td>💬 <?php echo $post['comments_count']; ?></td>
+                                    <td><img src="../icons/anim/ic-Star_rate.gif" alt="⭐" class="nav-icon"> <?php echo isset($post['avRate']) ? $post['avRate'] : 0; ?></td>
+                                    <td><img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon"> <?php echo $post['comments_count']; ?></td>
                                     <td>
                                         <?php if ($post['isNote'] == 0): ?>
                                             <a href="../post.php?id=<?php echo $post['id_p']; ?>" class="admin-btn admin-btn-sm" target="_blank">Просмотр</a>

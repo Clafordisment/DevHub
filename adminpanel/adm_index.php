@@ -6,6 +6,8 @@ require_once 'includes/functions.php';
 
 requireAdminAuth();
 
+$active_page = 'dashboard';
+
 $conn = getDbConnection($config);
 $stats = getGeneralStats($conn);
 $topPostsRating = getTopPostsByRating($conn, 10);
@@ -13,6 +15,34 @@ $topPostsComments = getTopPostsByComments($conn, 10);
 $topUsers = getTopUsersByPosts($conn, 10);
 $topTags = getTopTags($conn, 30);
 $categoryDistribution = getCategoryDistribution($conn);
+
+$ratingChartLabels = array();
+$ratingChartData = array();
+foreach ($topPostsRating as $post) {
+    $ratingChartLabels[] = mb_substr($post['title'], 0, 20);
+    $ratingChartData[] = $post['avRate'];
+}
+
+$commentsChartLabels = array();
+$commentsChartData = array();
+foreach ($topPostsComments as $post) {
+    $commentsChartLabels[] = mb_substr($post['title'], 0, 20);
+    $commentsChartData[] = $post['comments_count'];
+}
+
+$authorsChartLabels = array();
+$authorsChartData = array();
+foreach ($topUsers as $user) {
+    $authorsChartLabels[] = mb_substr($user['name'], 0, 20);
+    $authorsChartData[] = $user['posts_count'];
+}
+
+$tagsChartLabels = array();
+$tagsChartData = array();
+foreach ($topTags as $tag) {
+    $tagsChartLabels[] = $tag['name'];
+    $tagsChartData[] = $tag['usage_count'];
+}
 
 $conn->close();
 ?>
@@ -23,6 +53,12 @@ $conn->close();
     <title>AdminPanel | DevHub</title>
     <link rel="stylesheet" href="admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
+    <!-- Функции создания графиков -->
+    <script src="includes/adm_charts.js"></script>
 </head>
 <body>
     <div class="admin-wrapper">
@@ -75,8 +111,12 @@ $conn->close();
                 </div>
             </div>
             
+            <!-- Топ-10 постов по рейтингу -->
             <div class="admin-section">
-                <h2><img src="../icons/anim/ic-Cup.gif" alt="🏆" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 постов по рейтингу</h2>
+                <div class="section-header">
+                    <h2><img src="../icons/anim/ic-Cup.gif" alt="🏆" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 постов по рейтингу</h2>
+                    <button class="chart-toggle-btn" data-target="ratingChart"> Показать график</button>
+                </div>
                 <div class="admin-top-list">
                     <?php 
                     $index = 0;
@@ -107,8 +147,12 @@ $conn->close();
                     endforeach; 
                     ?>
                 </div>
+                <div class="chart-wrapper" id="ratingChartWrapper" style="display: none;">
+                    <canvas id="ratingChart" width="800" height="400" style="max-width: 100%; height: auto;"></canvas>
+                </div>
             </div>
             
+            <!-- Распределение постов по категориям -->
             <div class="admin-section">
                 <h2><img src="../icons/anim/ic-Graph.gif" alt="📊" class="nav-icon"> Распределение постов по категориям</h2>
                 <div class="admin-category-stats">
@@ -132,8 +176,12 @@ $conn->close();
             </div>
 
             <div class="admin-two-columns">
+                <!-- Топ-10 постов по комментариям -->
                 <div class="admin-section">
-                    <h2><img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 постов по комментариям</h2>
+                    <div class="section-header">
+                        <h2><img src="../icons/anim/ic-Comment.gif" alt="💬" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 постов по комментариям</h2>
+                        <button class="chart-toggle-btn" data-target="commentsChart">📊 Показать график</button>
+                    </div>
                     <div class="admin-top-list">
                         <?php 
                         $index = 0;
@@ -163,10 +211,17 @@ $conn->close();
                         endforeach; 
                         ?>
                     </div>
+                    <div class="chart-wrapper" id="commentsChartWrapper" style="display: none;">
+                        <canvas id="commentsChart" width="800" height="400" style="max-width: 100%; height: auto;"></canvas>
+                    </div>
                 </div>
                 
+                <!-- Топ-10 авторов -->
                 <div class="admin-section">
-                    <h2><img src="../icons/static/ic-Crown.png" alt="👑" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 авторов</h2>
+                    <div class="section-header">
+                        <h2><img src="../icons/static/ic-Crown.png" alt="👑" class="nav-icon" style="width: 35px; height: 35px;"> Топ-10 авторов</h2>
+                        <button class="chart-toggle-btn" data-target="authorsChart">📊 Показать график</button>
+                    </div>
                     <div class="admin-top-list">
                         <?php 
                         $index = 0;
@@ -196,11 +251,18 @@ $conn->close();
                         endforeach; 
                         ?>
                     </div>
+                    <div class="chart-wrapper" id="authorsChartWrapper" style="display: none;">
+                        <canvas id="authorsChart" width="800" height="400" style="max-width: 100%; height: auto;"></canvas>
+                    </div>
                 </div>
             </div>
             
+            <!-- Топ-30 тегов -->
             <div class="admin-section">
-                <h2><img src="../icons/static/ic-Tag_framed.png" alt="🏷️" class="nav-icon" style="width: 35px; height: 35px;"> Топ-30 тегов</h2>
+                <div class="section-header">
+                    <h2><img src="../icons/static/ic-Tag_framed.png" alt="🏷️" class="nav-icon" style="width: 35px; height: 35px;"> Топ-30 тегов</h2>
+                    <button class="chart-toggle-btn" data-target="tagsChart">📊 Показать график</button>
+                </div>
                 <div class="admin-tags-cloud">
                     <?php 
                     $maxUsage = isset($topTags[0]['usage_count']) ? $topTags[0]['usage_count'] : 1;
@@ -213,9 +275,23 @@ $conn->close();
                         </span>
                     <?php endforeach; ?>
                 </div>
+                <div class="chart-wrapper" id="tagsChartWrapper" style="display: none;">
+                    <div id="tagsChart" style="width: 100%; height: 450px;"></div>
+                </div>
             </div>
-            
+
         </main>
     </div>
+    <script>
+        //Данные для графиков в amd_charts.js
+        const ratingLabels = <?php echo json_encode($ratingChartLabels); ?>;
+        const ratingData = <?php echo json_encode($ratingChartData); ?>;
+        const commentsLabels = <?php echo json_encode($commentsChartLabels); ?>;
+        const commentsData = <?php echo json_encode($commentsChartData); ?>;
+        const authorsLabels = <?php echo json_encode($authorsChartLabels); ?>;
+        const authorsData = <?php echo json_encode($authorsChartData); ?>;
+        const tagsLabels = <?php echo json_encode($tagsChartLabels); ?>;
+        const tagsData = <?php echo json_encode($tagsChartData); ?>;
+    </script>
 </body>
 </html>
