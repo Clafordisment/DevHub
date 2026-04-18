@@ -29,7 +29,7 @@ if(isset($_POST["log"])){
             exit;
         }
         
-        $sql = "SELECT Id_U, login, username FROM users WHERE login='$login' AND password='$password' LIMIT 1";
+        $sql = "SELECT Id_U, login, username FROM Users WHERE login='$login' AND password='$password' LIMIT 1";
         $result = $conn->query($sql);
 
         if($result && $result->num_rows > 0){
