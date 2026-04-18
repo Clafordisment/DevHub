@@ -23,7 +23,7 @@ if(isset($_POST["reg"])){
         $message = "Заполните логин и пароль!";
         $messageClass = "err";
     } else {
-        $check_login_sql = "SELECT login FROM users WHERE login = '$login'";
+        $check_login_sql = "SELECT login FROM Users WHERE login = '$login'";
         $check_result = $conn->query($check_login_sql);
         
         if($check_result->num_rows > 0){
